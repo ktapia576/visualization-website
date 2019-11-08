@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Data Visualizations</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> <!-- Font Family-->
+    <script src="https://www.gstatic.com/charts/loader.js"></script>     <!-- Add Google Charts library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    <!-- Add JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"></script>   <!-- Add Papa Parse library -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>   <!-- Add JS Cookie -->
+    <script src="js/utilities.js" defer></script>  <!-- Add Own Js Source Code -->
+</head>
+<body>
+    <div class="menu">
+        <div class="dropdown" style="float:left;">
+            <button class="dropbtn">File</button>
+            <div class="dropdown-content" style="left:0;">
+                <a id="loadFileBtn" href="javascript:void(0);">
+                    Load CSV File
+                    <input type="file"
+                    id="loadFile"
+                    accept=".csv" hidden/>
+                </a>
+                <a id="loginBtn" href="javascript:void(0);">Login to DB</a>
+                <a id="logoutBtn" href="javascript:void(0);">Logout DB</a>
+                <a id="exitBtn" href="javascript:void(0);">Exit</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">View</button>
+            <div class="dropdown-content" style="left:0;">
+                <a id="lineBtn" href="javascript:void(0);">Line</a>
+                <a id="pieBtn" href="javascript:void(0);">Pie</a>
+                <a id="barBtn" href="javascript:void(0);">Bar</a>
+                <a href="#">Map</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">Setting</button>
+            <div class="dropdown-content" style="left:0;">
+                <a id="userInfoBtn" href="javascript:void(0);">User Info</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">Help</button>
+            <div class="dropdown-content" style="left:0;">
+                <a href="javascript:void(0);" id="infoBtn">Info</a>
+                <a href="javascript:void(0);" id="clientBtn">Client</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">     
+        <div class ="container2">   <!-- Nested Flex Conatianer --> 
+            <div class="graph-display">
+                <p id="graph-display-msg"></p>
+                <div id="chart-div"></div>
+            </div>
+            <div class="message" id="table-display">
+                <p>Lorem Ipsum is simply dummy Lorem Ipsum is simply Lorem Ipsum is simply </p>
+            </div>
+        </div>
+        <div class="data-selection">   
+            <p id="welcome-msg"></p>
+            <p id="message"></p>
+            
+            <div id='choices'>
+                <input type='radio' id='AvgWages' name='choice' value='avgWages' checked> <b>AvgWages</b>(Bar, Line)</br>
+                <input type='radio' id='EstimatedPopulation' name='choice' value='estimatedPopulation'> <b>EstimatedPopulation</b>(Bar, Line)</br>
+                <input type='radio' id='State' name='choice' value='state'> <b>State</b>(Bar, Pie)</br>
+
+                <p id="description">Please select one of the following choice, and then run one of the graph in the View menu.</br>
+                    <b>Note:</b> The empty, NULL or NaN value will be excluded</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Login -->
+
+    <div id="id01" class="modal">
+        <form class="modal-content animate" action="javascript:void(0);" method="post">
+          <div class="closecontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+          </div>
+      
+          <div class="login-container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" id="username" required>
+      
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="password" required>
+              
+            <button type="submit" id="login" onclick="document.getElementById('id01').style.display='none'">Login</button>
+          </div>
+      
+          <div class="login-container">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+          </div>
+        </form>
+    </div>
+
+    <!-- Modal for Info -->
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content animate">
+          <div class="closecontainer">
+            <span onclick="document.getElementById('infoModal').style.display='none'" class="close" title="Close Modal">&times;</span>
+          </div>
+      
+          <div class="info-container">
+            <p>Kevin Tapia</br>
+            CPS5745</br>
+            Oct. 20th 2019</p>
+              
+            <button type="button" onclick="document.getElementById('infoModal').style.display='none'" class="cancelbtn">Close</button>
+          </div>
+        </div>
+    </div>
+
+    <!-- Modal for User Info -->
+
+    <div id="userInfoModal" class="modal">
+        <div class="modal-content animate">
+            <div class="closecontainer">
+                <span onclick="document.getElementById('userInfoModal').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+        
+            <div class="user-info-container">
+                <p id="userInfo"></p>
+                
+                <button type="button" onclick="document.getElementById('userInfoModal').style.display='none'" class="cancelbtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Client Info -->
+
+    <div id="clientInfoModal" class="modal">
+        <div class="modal-content animate">
+            <div class="closecontainer">
+                <span onclick="document.getElementById('clientInfoModal').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+        
+            <div class="client-info-container">
+                <p id="clientUserInfo"></p>
+                
+                <button type="button" onclick="document.getElementById('clientInfoModal').style.display='none'" class="cancelbtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Client Info -->
+
+    <div id="exitModal" class="modal">
+        <div class="modal-content animate">
+            <div class="closecontainer">
+                <span onclick="document.getElementById('exitModal').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+        
+            <div class="exit-container">
+                <p>Are you sure you want to exit?</p>
+                
+                <button type="button" id="exit" onclick="document.getElementById('exitModal').style.display='none'" class="cancelbtn">Yes</button>
+                <button type="button" onclick="document.getElementById('exitModal').style.display='none'" class="cancelbtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Error Info -->
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content animate">
+            <div class="closecontainer">
+                <span onclick="document.getElementById('errorModal').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+        
+            <div class="error-container">
+                <p id="error-message"></p>
+                
+                <button type="button" onclick="document.getElementById('errorModal').style.display='none'">Okay</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
