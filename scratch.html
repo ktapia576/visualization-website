@@ -96,20 +96,16 @@
             <div class="col-md-2 d-none d-md-block bg-light sidebar">   <!-- Show sidebar only on md devices -->
                 <div class="sidebar-sticky mt-5">
                     <!-- Message Area -->
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center mx-3 mt-2 mb-2 text-muted">
                         <span>Message Area</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="message-square"></span>
-                        </a>
+                        <span class="d-flex align-items-center text-muted" data-feather="message-square"></span>
                     </h6>
                     <p class="mx-3">This is a test message!</p>
                     <!-- End of Message Area -->
                     <!-- Chart Options -->
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-6 mb-2 text-muted">
                         <span>Chart Options</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="menu"></span>
-                        </a>
+                        <span class="d-flex align-items-center text-muted" data-feather="list"></span>
                     </h6>
                     <div class="custom-control custom-radio mx-3">
                         <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
@@ -124,51 +120,19 @@
                         <label class="custom-control-label" for="customRadio3">State (Bar, Pie)</label>
                     </div>
                     <p class="mx-3 my-1 text-muted">Please select one of the following choices, and then run one of the graph choices in the View menu.</p>
-                    <!-- End of Chart Options-->
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                            <span data-feather="home"></span>
-                            Dashboard <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Orders
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            Products
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Customers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
-                            </a>
-                        </li>
-                    </ul>
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Saved reports</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="plus-circle"></span>
-                        </a>
+                    <p class="mx-3 my-1 text-muted"><strong>Note:</strong> The empty, NULL or NaN values will be excluded.</p>
+                    <!-- End of Chart Options--> 
+                    <!-- Slider for Highlighting cells -->
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center mx-3 mt-3 mb-2 text-muted">
+                        <span>Highlight Cells</span>
+                        <span class="d-flex align-items-center text-muted" data-feather="tool"></span>
                     </h6>
+                    <div class="form-group mx-3">
+                        <label for="customRange1">Slide for Cell Highlighting:</label>
+                        <input type="range" class="custom-range" min="0" max="1000" step="1" id="customRange1" oninput="rangeValue.value = 'Value: '+ customRange1.value">
+                        <p class="text-center"><output name="rangeValue" id="rangeValue"></output></p>
+                    </div>    
+                    <!-- End of Slider -->  
                 </div>
             </div>
             <!-- End of Sidebar -->
