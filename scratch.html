@@ -26,8 +26,7 @@
                 </a>
                 <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
                     <button class="dropdown-item" type="button">Load CSV File</button>
-                    <button class="dropdown-item" type="button" onclick="alert('hey');">Action</button>
-                    <button class="dropdown-item" type="button" onclick="alert('hey');">Action</button>
+                    <button class="dropdown-item" type="button">Exit</button>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -35,9 +34,27 @@
                     View
                 </a>
                 <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
-                    <button class="dropdown-item" type="button" onclick="alert('hey');">Action</button>
-                    <button class="dropdown-item" type="button" onclick="alert('hey');">Action</button>
-                    <button class="dropdown-item" type="button" onclick="alert('hey');">Action</button>
+                    <button class="dropdown-item" type="button">Line</button>
+                    <button class="dropdown-item" type="button">Pie</button>
+                    <button class="dropdown-item" type="button">Pie</button>
+                    <button class="dropdown-item" type="button">Map</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Setting
+                </a>
+                <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
+                    <button class="dropdown-item" type="button">User Info</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Help
+                </a>
+                <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
+                    <button class="dropdown-item" type="button">Info</button>
+                    <button class="dropdown-item" type="button">Client</button>
                 </div>
             </li>
         </ul>
@@ -64,7 +81,7 @@
                     <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
             </li>
-            <li class="nav-item" id="sign-out">
+            <li class="nav-item" id="sign-out" style="display: none;">  <!-- Display only after Logged In-->
                 <a class="nav-link text-white" href="#">Sign out</a>
             </li>
         </ul>
