@@ -55,7 +55,7 @@
                     Setting
                 </a>
                 <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
-                    <button class="dropdown-item" type="button">User Info</button>
+                    <button class="dropdown-item" type="button" onclick="showUserInfo()">User Info</button>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -107,7 +107,7 @@
                         <span>Message Area</span>
                         <span class="d-flex align-items-center text-muted" data-feather="message-square"></span>
                     </h6>
-                    <p class="mx-3">This is a test message!</p>
+                    <p class="mx-3" id="messageArea">This is a test message!</p>
                     <!-- End of Message Area -->
                     <!-- Chart Options -->
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-6 mb-2 text-muted">
@@ -190,6 +190,26 @@
                 </div>
             </div>
             <!-- End of Info Modal -->
+            <!-- Modal for Exit -->
+            <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">User Info</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body text-center" id="userInfo">
+                            
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Exit Modal -->
             <!-- Modal for Exit -->
             <div class="modal fade" id="exitModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-md" role="document">
