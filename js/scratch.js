@@ -6,7 +6,8 @@ google.charts.load('current', {'packages':['corechart']});  // Load for Pie
 
 //----------- Global Variables (Data) ----------
 var csvFile = null;
-var data = null;
+var unfilteredData = null;
+var data = [];
 var pieChart = null;
 var barChart = null;
 var lineChart = null;
@@ -49,6 +50,27 @@ const showUserInfo = () => {
     $('#userInfoModal').modal('toggle');  // Show modal
 }
 
+//------- Clean Data from CSV File -----------
+const cleanData = uncleanData => {
+    var cleanData = [];
+    uncleanData.forEach( row => {
+        var obj = {
+            "RecordNumber": row.RecordNumber, 
+            "Zipcode": Number(row.Zipcode), 
+            "City": row.City, 
+            "State": row.State, 
+            "EstimatedPopulation": Number(row.EstimatedPopulation), 
+            "AvgWages": Number(row.AvgWages), 
+            "Latitude": Number(row.Latitude), 
+            "Longitude": Number(row.Longitude)
+        }
+        cleanData.push(obj);
+    });
+    return cleanData;
+}
+//------- End of Cleaning Data ---------------
+
+
 //----- Load File -------
 $("#file").change( e => {  // when value of input changes (once user uploads file), do this [change event is sent to an element when its value changes]
     loadFile();
@@ -66,11 +88,19 @@ const loadFile = () => {
         skipEmptyLines: true, //  lines that are completely empty will be skipped
         complete: results => {  // Callback to execute when parsing complete
             console.log("Finished:", results); 
-            data = results.data;
+            unfilteredData = results.data;
+            console.log("unfiltered:",unfilteredData);
             headers = results.meta .fields;
             //headers = data.shift(); // returns first row, which are headers, and then removes it from array
             console.log("Headers:", headers); 
             console.log("Data:", data);  // Get a record: data[0].Zipcode | where data[n'th item]."header"
+
+            data = cleanData(unfilteredData);
+
+            $('.table').footable({
+                "columns": $.get("content/columns.json"),   // Load columns.json
+                "rows": data
+            });
         }, 
         error: error => {   // Callback to execute if FileReader encounters an error.
             console.log(error.message); 
@@ -106,23 +136,10 @@ const exit = () => {
     barChart = null;
     lineChart = null;
 
+    // remove table
+    $("table").empty(); // removes all child nodes and content from the selected elements
+
     // Clear Messages
     document.getElementById('messageArea').textContent = "Data has been cleared!";
 }
 //-------- End of Button Handlers ---------
-$('.table').footable({
-    "columns": [
-        { "name": "id", "title": "ID" },
-        { "name": "firstName"},
-        { "name": "lastName"},
-        { "name": "jobTitle"},
-        { "name": "started"},
-        { "name": "dob"}
-    ],
-    "rows": [
-        { "id": "123", "firstName": "John", "lastName": "Paul", "jobTitle": "Chef", "started": "11-5-20", "dob": "02-9-98" },
-        { "id": "123", "firstName": "John", "lastName": "Paul", "jobTitle": "Chef", "started": "11-5-20", "dob": "02-9-98" },
-        { "id": "123", "firstName": "John", "lastName": "Paul", "jobTitle": "Chef", "started": "11-5-20", "dob": "02-9-98" },
-        { "id": "123", "firstName": "John", "lastName": "Paul", "jobTitle": "Chef", "started": "11-5-20", "dob": "02-9-98" }
-    ]
-});
