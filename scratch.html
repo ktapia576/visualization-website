@@ -7,7 +7,7 @@
     <title>Data Visualization</title>
 
     <!-- Bootstrap 4 -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -20,7 +20,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"></script>   <!-- Add Papa Parse library -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>   <!-- Add JS Cookie -->
-
+    <script src="https://www.gstatic.com/charts/loader.js"></script>     <!-- Add Google Charts library -->
+    <link rel="https://cdnjs.cloudflare.com/ajax/libs/jquery-footable/3.1.6/footable.bootstrap.css">     <!-- Footable CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-footable/3.1.6/footable.js"></script>     <!-- Footable JS -->
+    
     <!-- Add Own Js Source Code -->
     <script src="js/scratch.js" defer></script>
   </head>
@@ -35,7 +38,7 @@
                     File
                 </a>
                 <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
-                    <label class="dropdown-item">Load CSV File <input type="file" style="display: none;"></label>
+                    <label class="dropdown-item">Load CSV File <input type="file" style="display: none;" id="file"></label>
                     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#exitModal">Exit</button>
                 </div>
             </li>
@@ -146,18 +149,9 @@
             <!-- Main Content (Charts, table, etc.) -->
             <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group mr-2">
-                        <button class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button class="btn btn-sm btn-outline-secondary">Export</button>
-                        </div>
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <span data-feather="calendar"></span>
-                        This week
-                        </button>
-                    </div>
+                    <h1 class="h2">Charts</h1>
                 </div>
+                <table class="table" data-sorting="true"></table>
             </main>
             <!-- End of Main Content-->
             <!-- Load Icons After Page load -->
