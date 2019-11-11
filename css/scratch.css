@@ -74,3 +74,58 @@ table tr th {
 	background-color: #007bff;
 	color: #ffffff;
 }
+
+/* Footable CSS for paging */
+.pagination {
+  justify-content: center;
+}
+
+.pagination > li > a, .pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #337ab7;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid 
+  #ddd;
+      border-top-color: rgb(221, 221, 221);
+      border-right-color: rgb(221, 221, 221);
+      border-bottom-color: rgb(221, 221, 221);
+      border-left-color: rgb(221, 221, 221);
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus, 
+.pagination > .active > a:hover, 
+.pagination > .active > span, 
+.pagination > .active > span:focus, 
+.pagination > .active > span:hover {
+  z-index: 3;
+  color: #fff;
+  cursor: default;
+  background-color:#337ab7;
+  border-color:#337ab7;
+}
+
+/* Footable page number css */
+.label-default {
+  background-color: 
+  #777;
+}
+
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  color: 
+  #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
