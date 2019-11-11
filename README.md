@@ -5,3 +5,4 @@ A website made for visualizing data.
 * [Feather Use](https://github.com/feathericons/feather)
 * [Feather Icons](https://feathericons.com/)
 * [Bootstrap 4](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
+* [Use FontAwesome instead of Glyphicons](https://github.com/fooplugins/FooTable/issues/415)
