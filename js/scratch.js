@@ -7,7 +7,7 @@ google.charts.load('current', {'packages':['corechart']});  // Load for Pie
 //----------- Global Variables (Data) ----------
 var csvFile = null;
 var unfilteredData = null;
-var data = [];
+var data = null;
 var pieChart = null;
 var barChart = null;
 var lineChart = null;
@@ -98,6 +98,12 @@ const loadFile = () => {
             data = cleanData(unfilteredData);
 
             $('.table').footable({
+                "paging": {
+                    "enabled": true
+                },
+                "sorting": {
+                    "enabled": true
+                },
                 "columns": $.get("content/columns.json"),   // Load columns.json
                 "rows": data
             });
