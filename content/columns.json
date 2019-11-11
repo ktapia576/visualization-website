@@ -1,0 +1,10 @@
+[
+    { "name": "RecordNumber", "title": "RecordNumber", "type":"text"},
+    { "name": "Zipcode", "title": "Zipcode", "type":"number"},
+    { "name": "City", "title": "City", "type":"text"},
+    { "name": "State", "title": "State", "type":"text"},
+    { "name": "EstimatedPopulation", "title": "EstimatedPopulation", "type":"number"},
+    { "name": "AvgWages", "title": "AvgWages", "type":"number"},
+    { "name": "Latitude", "title": "Latitude", "type":"number"},
+    { "name": "Longitude", "title": "Longitude", "type":"number"}
+]
