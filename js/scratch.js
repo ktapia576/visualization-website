@@ -29,6 +29,129 @@ const checkChoice = () => {
     return choice;
 }
 
+const cleanData = choice => {
+    var states =[];
+    var newData=[];
+  
+    // Get states
+    data.forEach( row => { 
+      states.push(row.State);
+    });
+    states = new Set(states); // Get unique states
+  
+    // Get avg of choice per state
+    var count = 0;
+    var total = 0;
+  
+    // Check what choice
+    if (choice == "AvgWages") {
+      states.forEach(state => {
+        data.forEach(dataRow => {
+          if(state == dataRow.State){
+            if(isNaN(Number(dataRow.AvgWages))){
+              // skip
+            } else {
+              total = total + Number(dataRow.AvgWages);
+              count++;
+            }
+          }
+        });
+  
+        newData.push([state, total/count]);
+        total=0;
+        count=0;
+      });
+    } else if (choice == "EstimatedPopulation") {  
+      states.forEach(state => {
+        data.forEach(dataRow => {
+          if(state == dataRow.State){
+            if(isNaN(Number(dataRow.AvgWages))){
+              // skip
+            } else {
+              total = total + Number(dataRow.EstimatedPopulation);
+              count++;
+            }
+          }
+        });
+  
+        newData.push([state, total/count]);
+        total=0;
+        count=0;
+      });
+    } else if (choice == "Count") {
+      states.forEach(state => {
+        data.forEach(dataRow => {
+          if(state == dataRow.State){
+            count++;
+          }
+        });
+  
+        newData.push([state, count]);
+        total=0;
+        count=0;
+      });
+    } else {
+      console.log("Error with choice");
+    }
+    return newData;
+}
+
+const drawLine = choice => {
+    lineData = new google.visualization.DataTable();
+  
+    var options = {
+      height: 400,
+      title: `${choice} by State`,
+      hAxis: {
+        title: 'State'
+      },
+      vAxis: {
+        title: choice
+      },
+      backgroundColor: '#ffffff'
+    };
+  
+    lineData.addColumn('string', 'State');
+    lineData.addColumn('number', choice);
+    
+    var newData = cleanData(choice);
+    lineData.addRows(newData);
+  
+    lineChart = new google.visualization.LineChart(document.getElementById('chart-div-2'));
+    lineChart.draw(lineData, options);
+}
+
+const drawBar = choice => {
+    var dataArray = [];
+    dataArray.push(['State', choice]);
+  
+    var newData = cleanData(choice);
+    newData.forEach(row => { dataArray.push(row)});
+  
+    var barData = google.visualization.arrayToDataTable(dataArray);
+  
+    var options = {
+        height: 400,
+        title: `${choice} by State`,
+        chartArea: {
+          left: '5%',
+          top:'8%',
+          width: '50%',
+          height: '50%'
+        },
+        hAxis: {
+          title: "State"
+        },
+        vAxis: {
+          title: choice
+        }
+    };
+    
+  
+    barChart = new google.visualization.ColumnChart(document.getElementById('chart-div-1'));
+    barChart.draw(barData, options);
+}
+
 //----------- Button Handlers -----------------
 const showClientInfo = () => {
     var browser = navigator.userAgent;  // Get user's browser
@@ -70,14 +193,14 @@ const drawCharts = () => {
     var choice = checkChoice();
 
     if(choice === "AvgWages"){
-        drawBar();
-        drawLine();
+        drawBar(choice);
+        drawLine(choice);
     } else if(choice == "EstimatedPopulation"){
-        drawBar();
-        drawLine();
+        drawBar(choice);
+        drawLine(choice);
     } else if (choice == "State"){
-        drawBar();
-        drawPie();
+        drawBar(choice);
+        drawPie(choice);
     } else{
         console.log("drawCharts failure...");
     }
@@ -86,9 +209,9 @@ const drawCharts = () => {
 //------- End of Button Handlers -------------
 
 //------- Clean Data from CSV File -----------
-const cleanData = uncleanData => {
-    var cleanData = [];
-    uncleanData.forEach( row => {
+const formatData = unformattedData => {
+    var formattedData = [];
+    unformattedData.forEach( row => {
         var obj = {
             "RecordNumber": row.RecordNumber, 
             "Zipcode": Number(row.Zipcode), 
@@ -99,9 +222,9 @@ const cleanData = uncleanData => {
             "Latitude": Number(row.Latitude), 
             "Longitude": Number(row.Longitude)
         }
-        cleanData.push(obj);
+        formattedData.push(obj);
     });
-    return cleanData;
+    return formattedData;
 }
 //------- End of Cleaning Data ---------------
 
@@ -123,13 +246,13 @@ const loadFile = () => {
         skipEmptyLines: true, //  lines that are completely empty will be skipped
         complete: results => {  // Callback to execute when parsing complete
             console.log("Finished:", results); 
-            unfilteredData = results.data;
-            console.log("unfiltered:",unfilteredData);
+            unformattedData = results.data;
+            console.log("unfiltered:",unformattedData);
             headers = results.meta .fields;
             //headers = data.shift(); // returns first row, which are headers, and then removes it from array
             console.log("Headers:", headers); 
 
-            data = cleanData(unfilteredData);
+            data = formatData(unformattedData);
             console.log("Data:", data);
 
             $('.table').footable({
