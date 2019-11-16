@@ -47,7 +47,10 @@
                     File
                 </a>
                 <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
-                    <label class="dropdown-item">Load CSV File <input type="file" style="display: none;" id="file"></label>
+                    <label class="dropdown-item my-0" style="cursor:pointer;">Load CSV File <input type="file" class="d-none" id="file"></label>
+                    <button class="dropdown-item" type="button">Load DB Data 1</button>
+                    <button class="dropdown-item" type="button">Load DB Data 2</button>
+                    <button class="dropdown-item" type="button">Load DB Data 3</button>
                     <button class="dropdown-item" type="button" data-toggle="modal" data-target="#exitModal">Exit</button>
                 </div>
             </li>
@@ -56,10 +59,11 @@
                     View
                 </a>
                 <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
-                    <button class="dropdown-item" type="button" onclick="drawCharts()">Draw Charts</button>
                     <button class="dropdown-item" type="button">Bar</button>
+                    <button class="dropdown-item" type="button">Line</button>
                     <button class="dropdown-item" type="button">Pie</button>
                     <button class="dropdown-item" type="button">Map</button>
+                    <button class="dropdown-item" type="button" onclick="drawCharts()">Draw Both Charts</button>
                 </div>
             </li>
             <li class="nav-item dropdown">
