@@ -99,7 +99,8 @@ const loadFile = () => {
 
             $('.table').footable({
                 "paging": {
-                    "enabled": true
+                    "enabled": true,
+                    "size": 15
                 },
                 "sorting": {
                     "enabled": true
