@@ -100,7 +100,7 @@ const drawLine = choice => {
     lineData = new google.visualization.DataTable();
   
     var options = {
-      height: 400,
+      height: 450,
       title: `${choice} by State`,
       hAxis: {
         title: 'State'
@@ -131,14 +131,8 @@ const drawBar = choice => {
     var barData = google.visualization.arrayToDataTable(dataArray);
   
     var options = {
-        height: 400,
+        height: 450,
         title: `${choice} by State`,
-        chartArea: {
-          left: '5%',
-          top:'8%',
-          width: '50%',
-          height: '50%'
-        },
         hAxis: {
           title: "State"
         },
