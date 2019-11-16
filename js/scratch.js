@@ -13,6 +13,22 @@ var barChart = null;
 var lineChart = null;
 //----------- End of Global Variables -----------
 
+const checkChoice = () => {
+    var choice;
+
+    if($("#AvgWages").prop("checked")){
+        choice = "AvgWages";
+    } else if($("#EstimatedPopulation").prop("checked")) {
+        choice = "EstimatedPopulation";
+    } else if($("#State").prop("checked")) {
+        choice = "Count";
+    } else {
+        choice = null;
+    }
+
+    return choice;
+}
+
 //----------- Button Handlers -----------------
 const showClientInfo = () => {
     var browser = navigator.userAgent;  // Get user's browser
@@ -49,6 +65,25 @@ const showUserInfo = () => {
 
     $('#userInfoModal').modal('toggle');  // Show modal
 }
+
+const drawCharts = () => {
+    var choice = checkChoice();
+
+    if(choice === "AvgWages"){
+        drawBar();
+        drawLine();
+    } else if(choice == "EstimatedPopulation"){
+        drawBar();
+        drawLine();
+    } else if (choice == "State"){
+        drawBar();
+        drawPie();
+    } else{
+        console.log("drawCharts failure...");
+    }
+}
+
+//------- End of Button Handlers -------------
 
 //------- Clean Data from CSV File -----------
 const cleanData = uncleanData => {
@@ -93,9 +128,9 @@ const loadFile = () => {
             headers = results.meta .fields;
             //headers = data.shift(); // returns first row, which are headers, and then removes it from array
             console.log("Headers:", headers); 
-            console.log("Data:", data);  // Get a record: data[0].Zipcode | where data[n'th item]."header"
 
             data = cleanData(unfilteredData);
+            console.log("Data:", data);
 
             $('.table').footable({
                 "paging": {
