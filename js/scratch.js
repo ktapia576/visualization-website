@@ -200,6 +200,36 @@ const drawCharts = () => {
     }
 }
 
+$("#login").submit(e => {
+  e.preventDefault(); // avoid to execute the actual submit of the form.
+
+  var form = $("#login");
+  var url = form.attr('action');
+  console.log(form.serialize());
+
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: form.serialize(), // serializes the form's elements.,
+    success: result => {
+      var cookies = Cookies.get(); // get object of all cookies
+
+      document.getElementById('loginDropmenu').style.display='none';
+      document.getElementById("username").textContent = cookies.username;
+      document.getElementById("username-item").style.display='block';
+      document.getElementById('sign-out').style.display='block';
+      var cookies = Cookies.get(); // get object of all cookies
+      console.log("success");
+      console.log(result);
+    },
+    error: result => {
+      var message = result.responseJSON.message;
+      console.log("error");
+      console.log(result);
+    }
+  });
+});
+
 //------- End of Button Handlers -------------
 
 //------- Clean Data from CSV File -----------
