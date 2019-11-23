@@ -1,187 +1,272 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Visualizations</title>
-    <link rel="stylesheet" href="index.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> <!-- Font Family-->
-    <script src="https://www.gstatic.com/charts/loader.js"></script>     <!-- Add Google Charts library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    <!-- Add JQuery -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Data Visualization</title>
+
+    <!-- Bootstrap 4 -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Moment Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="css/index.css" rel="stylesheet">
+    
+    <!-- Footable -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="js/footable.js"></script>
+    <link href="css/footable.bootstrap.css" rel="stylesheet">
+    
+    <!-- Use Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="public/images/logo-small.png"> 
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.js"></script>   <!-- Add Papa Parse library -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>   <!-- Add JS Cookie -->
-    <script src="js/utilities.js" defer></script>  <!-- Add Own Js Source Code -->
-</head>
-<body>
-    <div class="menu">
-        <div class="dropdown" style="float:left;">
-            <button class="dropbtn">File</button>
-            <div class="dropdown-content" style="left:0;">
-                <a id="loadFileBtn" href="javascript:void(0);">
-                    Load CSV File
-                    <input type="file"
-                    id="loadFile"
-                    accept=".csv" hidden/>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>     <!-- Add Google Charts library -->
+
+    <!-- Add Own Js Source Code -->
+    <script src="js/main.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-expand-md sticky-top bg-primary flex-md-nowrap p-0 justify-content-start">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Data Visualization</a>
+        <ul class="navbar-nav order-0 px-3">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    File
                 </a>
-                <a id="loginBtn" href="javascript:void(0);">Login to DB</a>
-                <a id="logoutBtn" href="javascript:void(0);">Logout DB</a>
-                <a id="exitBtn" href="javascript:void(0);">Exit</a>
+                <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
+                    <label class="dropdown-item my-0" style="cursor:pointer;">Load CSV File <input type="file" class="d-none" id="file"></label>
+                    <button class="dropdown-item" type="button">Load DB Data 1</button>
+                    <button class="dropdown-item" type="button">Load DB Data 2</button>
+                    <button class="dropdown-item" type="button">Load DB Data 3</button>
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#exitModal">Exit</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    View
+                </a>
+                <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
+                    <button class="dropdown-item" type="button">Bar</button>
+                    <button class="dropdown-item" type="button">Line</button>
+                    <button class="dropdown-item" type="button">Pie</button>
+                    <button class="dropdown-item" type="button">Map</button>
+                    <button class="dropdown-item" type="button" onclick="drawCharts()">Draw Both Charts</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Setting
+                </a>
+                <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
+                    <button class="dropdown-item" type="button" onclick="showUserInfo()">User Info</button>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Help
+                </a>
+                <div class="dropdown-menu mt-1" aria-labelledby="navbarDropdownMenuLink">
+                    <button class="dropdown-item" type="button" data-toggle="modal" data-target="#projectInfoModal">Project Info</button>
+                    <button class="dropdown-item" type="button" onclick="showClientInfo()">Client Info</button>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav order-1 px-3 ml-auto">
+            <li class="nav-item dropdown dropleft" id="loginDropmenu">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                </a>
+                <form class="dropdown-menu p-3 mt-1" id="login" action="src/login.php" method="post" style="min-width: 20rem;"> <!-- Min Width for login menu -->
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" placeholder="user123" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="remember">
+                        <label class="form-check-label" for="remember">
+                        Remember me
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Sign in</button>
+                </form>
+            </li>
+            <li class="nav-item" id="username-item" style="display:none">  <!-- Display only after Logged In-->
+                <span class="nav-link text-white" id="username">Username</a>
+            </li>
+            <li class="nav-item" id="sign-out" style="display:none">  <!-- Display only after Logged In-->
+                <a class="nav-link text-white" href="#">Sign out</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- End of Navbar-->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 d-none d-md-block bg-light sidebar">   <!-- Show sidebar only on md devices -->
+                <div class="sidebar-sticky mt-5">
+                    <!-- Message Area -->
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center mx-3 mt-2 mb-2 text-muted">
+                        <span>Message Area</span>
+                        <span class="d-flex align-items-center text-muted" data-feather="message-square"></span>
+                    </h6>
+                    <p class="mx-3" id="messageArea">This is a test message!</p>
+                    <!-- End of Message Area -->
+                    <!-- Chart Options -->
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-6 mb-2 text-muted">
+                        <span>Chart Options</span>
+                        <span class="d-flex align-items-center text-muted" data-feather="list"></span>
+                    </h6>
+                    <div class="custom-control custom-radio mx-3">
+                        <input type="radio" id="AvgWages" name="chartChoice" class="custom-control-input" checked>
+                        <label class="custom-control-label" for="AvgWages">AvgWages (Bar, Line)</label>
+                    </div>
+                    <div class="custom-control custom-radio mx-3">
+                        <input type="radio" id="EstimatedPopulation" name="chartChoice" class="custom-control-input">
+                        <label class="custom-control-label" for="EstimatedPopulation">EstimatedPopulation (Bar, Line)</label>
+                    </div>
+                    <div class="custom-control custom-radio mx-3">
+                        <input type="radio" id="State" name="chartChoice" class="custom-control-input">
+                        <label class="custom-control-label" for="State">State (Bar, Pie)</label>
+                    </div>
+                    <p class="mx-3 my-1 text-muted">Please select one of the following choices, and then run one of the graph choices in the View menu.</p>
+                    <p class="mx-3 my-1 text-muted"><strong>Note:</strong> The empty, NULL or NaN values will be excluded.</p>
+                    <!-- End of Chart Options--> 
+                    <!-- Slider for Highlighting cells -->
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center mx-3 mt-3 mb-2 text-muted">
+                        <span>Highlight Cells</span>
+                        <span class="d-flex align-items-center text-muted" data-feather="tool"></span>
+                    </h6>
+                    <div class="form-group mx-3">
+                        <label for="customRange1">Slide for Cell Highlighting:</label>
+                        <input type="range" class="custom-range" min="0" max="1000" step="1" id="customRange1" oninput="rangeValue.value = 'Value: '+ customRange1.value">
+                        <p class="text-center"><output name="rangeValue" id="rangeValue"></output></p>
+                    </div>    
+                    <!-- End of Slider -->  
+                </div>
             </div>
+            <!-- End of Sidebar -->
+            <!-- Main Content (Charts, table, etc.) -->
+            <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Charts</h1>
+                </div>
+                <div class="overflow-hidden" id="chart-div-1"></div>
+                <div class="overflow-hidden" id="chart-div-2"></div>
+                
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Table</h1>
+                </div>
+                <table class="table table-bordered table-hover table-sm"></table>
+            </main>
+            <!-- End of Main Content-->
+            <!-- Load Icons After Page load -->
+            <script>
+                feather.replace()
+            </script>
+            <!-- Icon Load Done -->
         </div>
-        <div class="dropdown">
-            <button class="dropbtn">View</button>
-            <div class="dropdown-content" style="left:0;">
-                <a id="lineBtn" href="javascript:void(0);">Line</a>
-                <a id="pieBtn" href="javascript:void(0);">Pie</a>
-                <a id="barBtn" href="javascript:void(0);">Bar</a>
-                <a href="#">Map</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">Setting</button>
-            <div class="dropdown-content" style="left:0;">
-                <a id="userInfoBtn" href="javascript:void(0);">User Info</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">Help</button>
-            <div class="dropdown-content" style="left:0;">
-                <a href="javascript:void(0);" id="infoBtn">Info</a>
-                <a href="javascript:void(0);" id="clientBtn">Client</a>
+    </div>
+    <!----------- Modals ------------->
+    <!-- Modal for Project Info -->
+    <div class="modal fade" id="projectInfoModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Project Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body text-center">
+                    Kevin Tapia</br>
+                    CPS5745</br>
+                    Dec. 1st 2019
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container">     
-        <div class ="container2">   <!-- Nested Flex Conatianer --> 
-            <div class="graph-display">
-                <p id="graph-display-msg"></p>
-                <div id="chart-div"></div>
-            </div>
-            <div class="message" id="table-display">
-                <p>Lorem Ipsum is simply dummy Lorem Ipsum is simply Lorem Ipsum is simply </p>
-            </div>
-        </div>
-        <div class="data-selection">   
-            <p id="welcome-msg"></p>
-            <p id="message"></p>
-            
-            <div id='choices'>
-                <input type='radio' id='AvgWages' name='choice' value='avgWages' checked> <b>AvgWages</b>(Bar, Line)</br>
-                <input type='radio' id='EstimatedPopulation' name='choice' value='estimatedPopulation'> <b>EstimatedPopulation</b>(Bar, Line)</br>
-                <input type='radio' id='State' name='choice' value='state'> <b>State</b>(Bar, Pie)</br>
-
-                <p id="description">Please select one of the following choice, and then run one of the graph in the View menu.</br>
-                    <b>Note:</b> The empty, NULL or NaN value will be excluded</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Login -->
-
-    <div id="id01" class="modal">
-        <form class="modal-content animate" action="javascript:void(0);" method="post">
-          <div class="closecontainer">
-            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-          </div>
-      
-          <div class="login-container">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" id="username" required>
-      
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" id="password" required>
-              
-            <button type="submit" id="login" onclick="document.getElementById('id01').style.display='none'">Login</button>
-          </div>
-      
-          <div class="login-container">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-          </div>
-        </form>
-    </div>
-
+    <!-- End of Project Info Modal -->
     <!-- Modal for Info -->
+    <div class="modal fade" id="clientInfoModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Client Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body text-center" id="clientInfo">
 
-    <div id="infoModal" class="modal">
-        <div class="modal-content animate">
-          <div class="closecontainer">
-            <span onclick="document.getElementById('infoModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-          </div>
-      
-          <div class="info-container">
-            <p>Kevin Tapia</br>
-            CPS5745</br>
-            Oct. 20th 2019</p>
-              
-            <button type="button" onclick="document.getElementById('infoModal').style.display='none'" class="cancelbtn">Close</button>
-          </div>
-        </div>
-    </div>
-
-    <!-- Modal for User Info -->
-
-    <div id="userInfoModal" class="modal">
-        <div class="modal-content animate">
-            <div class="closecontainer">
-                <span onclick="document.getElementById('userInfoModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
-        
-            <div class="user-info-container">
-                <p id="userInfo"></p>
-                
-                <button type="button" onclick="document.getElementById('userInfoModal').style.display='none'" class="cancelbtn">Close</button>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Modal for Client Info -->
-
-    <div id="clientInfoModal" class="modal">
-        <div class="modal-content animate">
-            <div class="closecontainer">
-                <span onclick="document.getElementById('clientInfoModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
-        
-            <div class="client-info-container">
-                <p id="clientUserInfo"></p>
-                
-                <button type="button" onclick="document.getElementById('clientInfoModal').style.display='none'" class="cancelbtn">Close</button>
+     </div>
+    <!-- End of Info Modal -->
+    <!-- Modal for Exit -->
+    <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">User Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body text-center" id="userInfo">
+                    
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Modal for Client Info -->
-
-    <div id="exitModal" class="modal">
-        <div class="modal-content animate">
-            <div class="closecontainer">
-                <span onclick="document.getElementById('exitModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
-        
-            <div class="exit-container">
-                <p>Are you sure you want to exit?</p>
-                
-                <button type="button" id="exit" onclick="document.getElementById('exitModal').style.display='none'" class="cancelbtn">Yes</button>
-                <button type="button" onclick="document.getElementById('exitModal').style.display='none'" class="cancelbtn">No</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Error Info -->
-
-    <div id="errorModal" class="modal">
-        <div class="modal-content animate">
-            <div class="closecontainer">
-                <span onclick="document.getElementById('errorModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
-        
-            <div class="error-container">
-                <p id="error-message"></p>
-                
-                <button type="button" onclick="document.getElementById('errorModal').style.display='none'">Okay</button>
+    <!-- End of Exit Modal -->
+    <!-- Modal for Exit -->
+    <div class="modal fade" id="exitModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Clean Workspace</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body text-center">
+                    Clicking exit button will clean the workspace. Make sure you save any work! <strong>(You will lose all data)</strong>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="exit()">Exit</button>
+                </div>
             </div>
         </div>
     </div>
-</body>
+    <!-- End of Exit Modal -->
+    <!------------- End of All Modals --------------->
+  </body>
 </html>
