@@ -14,19 +14,20 @@ var lineChart = null;
 //----------- End of Global Variables -----------
 
 const checkChoice = () => {
-    var choice;
+  let choice;
 
-    if($("#AvgWages").prop("checked")){
-        choice = "AvgWages";
-    } else if($("#EstimatedPopulation").prop("checked")) {
-        choice = "EstimatedPopulation";
-    } else if($("#State").prop("checked")) {
-        choice = "Count";
-    } else {
-        choice = null;
-    }
+  if($("#AvgWages").prop("checked")){
+    choice = "AvgWages";
+  } else if($("#EstimatedPopulation").prop("checked")) {
+    choice = "EstimatedPopulation";
+  } else if($("#State").prop("checked")) {
+    choice = "Count";
+  } else {
+    choice = null;
+    console.log(`Error with checkChoice(): choice=${choice}`);
+  }
 
-    return choice;
+  return choice;
 }
 
 const cleanData = choice => {
@@ -184,21 +185,21 @@ const showUserInfo = () => {
 }
 
 const drawCharts = () => {
-    var choice = checkChoice();
+  let choice = checkChoice();
 
-    if(choice === "AvgWages"){
-        drawBar(choice);
-        drawLine(choice);
-    } else if(choice == "EstimatedPopulation"){
-        drawBar(choice);
-        drawLine(choice);
-    } else if (choice == "State"){
-        drawBar(choice);
-        drawPie(choice);
-    } else{
-        console.log("drawCharts failure...");
-    }
+  // Check whether to draw bar and pie chart
+  if(choice == "State") {
+    drawBar(choice);
+    drawPie(choice);
+  }
+
+  drawBar(choice);
+  drawLine(choice);
 }
+
+$("#bothCharts").click(e => {
+  drawCharts();
+});
 
 $("#login").submit(e => {
   e.preventDefault(); // avoid to execute the actual submit of the form.
