@@ -219,7 +219,7 @@ $("#login").submit(e => {
       document.getElementById("username").textContent = cookies.username;
       document.getElementById("username-item").style.display='block';
       document.getElementById('sign-out').style.display='block';
-      var cookies = Cookies.get(); // get object of all cookies
+
       console.log("success");
       console.log(result);
     },
