@@ -5,13 +5,33 @@ google.charts.load('current', {'packages':['corechart']});  // Load for Pie
 //----------- End of Loading Google Charts --------
 
 //----------- Global Variables (Data) ----------
-var csvFile = null;
-var unfilteredData = null;
-var data = null;
-var pieChart = null;
-var barChart = null;
-var lineChart = null;
+let csvFile = null;
+let unfilteredData = null;
+let data = null;
+let pieChart = null;
+let barChart = null;
+let lineChart = null;
 //----------- End of Global Variables -----------
+
+const clearCharts = () => {
+  if (pieChart != null){
+    pieChart.clearChart();
+  }
+  if (barChart != null){
+    barChart.clearChart();
+  }
+  if (lineChart != null){
+    lineChart.clearChart();
+  }
+}
+
+
+const clearWorkspace = () => {
+  // remove table
+  $("table").empty(); // removes all child nodes and content from the selected elements
+
+  clearCharts();
+}
 
 const checkChoice = () => {
   let choice;
@@ -97,32 +117,32 @@ const cleanData = choice => {
     return newData;
 }
 
-const drawLine = choice => {
-    lineData = new google.visualization.DataTable();
+const drawLine = (choice, elementID) => {
+  lineData = new google.visualization.DataTable();
+
+  let options = {
+    height: 450,
+    title: `${choice} by State`,
+    hAxis: {
+      title: 'State'
+    },
+    vAxis: {
+      title: choice
+    },
+    backgroundColor: '#ffffff'
+  };
+
+  lineData.addColumn('string', 'State');
+  lineData.addColumn('number', choice);
   
-    var options = {
-      height: 450,
-      title: `${choice} by State`,
-      hAxis: {
-        title: 'State'
-      },
-      vAxis: {
-        title: choice
-      },
-      backgroundColor: '#ffffff'
-    };
-  
-    lineData.addColumn('string', 'State');
-    lineData.addColumn('number', choice);
-    
-    var newData = cleanData(choice);
-    lineData.addRows(newData);
-  
-    lineChart = new google.visualization.LineChart(document.getElementById('chart-div-2'));
-    lineChart.draw(lineData, options);
+  let newData = cleanData(choice);
+  lineData.addRows(newData);
+
+  lineChart = new google.visualization.LineChart(document.getElementById(elementID));
+  lineChart.draw(lineData, options);
 }
 
-const drawBar = choice => {
+const drawBar = (choice,elementID) => {
     var dataArray = [];
     dataArray.push(['State', choice]);
   
@@ -143,9 +163,35 @@ const drawBar = choice => {
     };
     
   
-    barChart = new google.visualization.ColumnChart(document.getElementById('chart-div-1'));
+    barChart = new google.visualization.ColumnChart(document.getElementById(elementID));
     barChart.draw(barData, options);
 }
+
+const drawPie = (choice, elementID) => {
+  var dataArray = [];
+  dataArray.push(['State', choice]);
+
+  var newData = cleanData(choice);
+  newData.forEach(row => { dataArray.push(row)});
+
+  var pieData = google.visualization.arrayToDataTable(dataArray);
+
+  var options = {
+    height: 400,
+    title: `${choice} by State`,
+    chartArea: {width: '80%', height: '80%'},
+    hAxis: {
+      title: choice
+    },
+    vAxis: {
+      title: "State"
+    }
+  };
+
+  pieChart = new google.visualization.PieChart(document.getElementById(elementID));
+  pieChart.draw(pieData, options);
+}
+
 
 //----------- Button Handlers -----------------
 const showClientInfo = () => {
@@ -189,13 +235,39 @@ const drawCharts = () => {
 
   // Check whether to draw bar and pie chart
   if(choice == "State") {
-    drawBar(choice);
-    drawPie(choice);
+    drawBar(choice, "chart-div-1");
+    drawPie(choice, "chart-div-2");
   }
 
-  drawBar(choice);
-  drawLine(choice);
+  drawBar(choice, "chart-div-1");
+  drawLine(choice, "chart-div-2");
 }
+
+$("#drawBar").click(e => {
+  let choice = checkChoice();
+
+  clearCharts();
+  drawBar(choice, "chart-div-1");
+});
+
+$("#drawLine").click(e => {
+  let choice = checkChoice();
+
+  clearCharts();
+  drawLine(choice, "chart-div-1");
+});
+
+$("#drawPie").click(e => {
+  let choice = checkChoice();
+
+  clearCharts();
+  drawPie(choice, "chart-div-1");
+});
+
+$("#drawMap").click(e => {
+  clearCharts();
+  console.log("Draw Map has been called...");
+});
 
 $("#bothCharts").click(e => {
   drawCharts();
@@ -259,77 +331,71 @@ $("#file").change( e => {  // when value of input changes (once user uploads fil
     loadFile();
 });
 
-const loadFile = () => { 
-    var headers;
-    csvFile = document.getElementById("file").files[0];   // get first file only
-    console.log(csvFile.size);
-      
-    // Parse local CSV file
-    Papa.parse(csvFile, {
-        delimiter: ",",
-        header: true,
-        skipEmptyLines: true, //  lines that are completely empty will be skipped
-        complete: results => {  // Callback to execute when parsing complete
-            console.log("Finished:", results); 
-            unformattedData = results.data;
-            console.log("unfiltered:",unformattedData);
-            headers = results.meta .fields;
-            //headers = data.shift(); // returns first row, which are headers, and then removes it from array
-            console.log("Headers:", headers); 
+const loadFile = () => {
 
-            data = formatData(unformattedData);
-            console.log("Data:", data);
+  clearWorkspace();
+  clearCharts();
 
-            $('.table').footable({
-                "paging": {
-                    "enabled": true,
-                    "size": 15
-                },
-                "sorting": {
-                    "enabled": true
-                },
-                "columns": $.get("content/columns.json"),   // Load columns.json
-                "rows": data
-            });
-        }, 
-        error: error => {   // Callback to execute if FileReader encounters an error.
-            console.log(error.message); 
-        } 
-    });
+
+  let headers;
+  csvFile = document.getElementById("file").files[0];   // get first file only
+  console.log(csvFile.size);
+    
+  // Parse local CSV file
+  Papa.parse(csvFile, {
+      delimiter: ",",
+      header: true,
+      skipEmptyLines: true, //  lines that are completely empty will be skipped
+      complete: results => {  // Callback to execute when parsing complete
+          console.log("Finished:", results); 
+          unformattedData = results.data;
+          console.log("unfiltered:",unformattedData);
+          headers = results.meta .fields;
+          //headers = data.shift(); // returns first row, which are headers, and then removes it from array
+          console.log("Headers:", headers); 
+
+          data = formatData(unformattedData);
+          console.log("Data:", data);
+
+          $('.table').footable({
+              "paging": {
+                  "enabled": true,
+                  "size": 15
+              },
+              "sorting": {
+                  "enabled": true
+              },
+              "columns": $.get("content/columns.json"),   // Load columns.json
+              "rows": data
+          });
+      }, 
+      error: error => {   // Callback to execute if FileReader encounters an error.
+          console.log(error.message); 
+      } 
+  });
 }
 //------ End of Load File ----------
 
 const exit = () => {
-    // Remove all cookies
-    Cookies.remove("name"); 
-    Cookies.remove("gender"); 
-    Cookies.remove("uid"); 
-    Cookies.remove("username"); 
-    
-    // Remove charts
-    if (pieChart != null){
-        pieChart.clearChart();
-    }
+  // Remove all cookies
+  Cookies.remove("name"); 
+  Cookies.remove("gender"); 
+  Cookies.remove("uid"); 
+  Cookies.remove("username"); 
+  
+  clearWorkspace();
+  
+  // Clear Data
+  csvFile = null;
+  data = null;
+  pieChart = null;
+  barChart = null;
+  lineChart = null;
 
-    if (barChart != null){
-        barChart.clearChart();
-    }
+  // remove table
+  $("table").empty(); // removes all child nodes and content from the selected elements
 
-    if (lineChart != null){
-        lineChart.clearChart();
-    }
-
-    // Clear Data
-    csvFile = null;
-    data = null;
-    pieChart = null;
-    barChart = null;
-    lineChart = null;
-
-    // remove table
-    $("table").empty(); // removes all child nodes and content from the selected elements
-
-    // Clear Messages
-    document.getElementById('messageArea').textContent = "Data has been cleared!";
+  // Clear Messages
+  document.getElementById('messageArea').textContent = "Data has been cleared!";
 }
 //-------- End of Button Handlers ---------
