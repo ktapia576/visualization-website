@@ -233,10 +233,13 @@ const showUserInfo = () => {
 const drawCharts = () => {
   let choice = checkChoice();
 
+  clearCharts();
+
   // Check whether to draw bar and pie chart
-  if(choice == "State") {
+  if(choice == "Count") {
     drawBar(choice, "chart-div-1");
     drawPie(choice, "chart-div-2");
+    return;
   }
 
   drawBar(choice, "chart-div-1");
@@ -254,6 +257,13 @@ $("#drawLine").click(e => {
   let choice = checkChoice();
 
   clearCharts();
+
+  // Check if State(Bar, Pie) chosen
+  if(choice === "Count"){
+    console.log("Cannot draw Line for selected chart...");
+    return;
+  }
+
   drawLine(choice, "chart-div-1");
 });
 
@@ -261,7 +271,13 @@ $("#drawPie").click(e => {
   let choice = checkChoice();
 
   clearCharts();
-  drawPie(choice, "chart-div-1");
+
+  // Check if State(Bar, Pie) chosen
+  if(choice === "Count"){
+    drawPie(choice, "chart-div-1");
+  }
+
+  console.log("Cannot use pie chart for selected chart...");
 });
 
 $("#drawMap").click(e => {
