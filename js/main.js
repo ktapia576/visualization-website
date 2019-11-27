@@ -219,9 +219,11 @@ const showUserInfo = () => {
     if (cookies.username == null){ // Check if null and undefined simultaneously
         document.getElementById('userInfo').textContent = "Login to see User info!";
     } else {
+        let name = cookies.name.replace("+"," "); // Replace all +'s with space
+
         let userInfo = `<b>UID:</b> ${cookies.uid}</br>
         <b>Username:</b> ${cookies.username}</br>
-        <b>Name:</b> ${cookies.name}</br>
+        <b>Name:</b> ${name}</br>
         <b>Gender:</b> ${cookies.gender}</br>`;
 
         document.getElementById('userInfo').innerHTML = userInfo; // innerHTML returns HTML, textContent has better performance because its value is not parsed as HTML
@@ -260,7 +262,13 @@ $("#drawLine").click(e => {
 
   // Check if State(Bar, Pie) chosen
   if(choice === "Count"){
+    let errorInfo = "Cannot create a Line Chart for selected chart option"
+
+    document.getElementById('errorInfo').textContent = errorInfo;
+    $('#errorModal').modal('toggle');
+
     console.log("Cannot draw Line for selected chart...");
+
     return;
   }
 
@@ -307,7 +315,7 @@ $("#login").submit(e => {
     url: url,
     data: form.serialize(), // serializes the form's elements.,
     success: result => {
-      var cookies = Cookies.get(); // get object of all cookies
+      let cookies = Cookies.get(); // get object of all cookies
 
       document.getElementById('loginDropmenu').style.display='none';
       document.getElementById("username").textContent = cookies.username;
@@ -318,8 +326,14 @@ $("#login").submit(e => {
       console.log(result);
     },
     error: result => {
-      var message = result.responseJSON.message;
-      console.log("error");
+      let message = result.responseJSON.message;
+
+      let errorInfo = "Error Logging In: "
+
+      document.getElementById('errorInfo').textContent = errorInfo+message;
+      $('#errorModal').modal('toggle');
+
+      console.log(errorInfo);
       console.log(result);
     }
   });
