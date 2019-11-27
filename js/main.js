@@ -195,14 +195,14 @@ const drawPie = (choice, elementID) => {
 
 //----------- Button Handlers -----------------
 const showClientInfo = () => {
-    var browser = navigator.userAgent;  // Get user's browser
-    var os = navigator.platform; 
-    var version = navigator.appVersion;
-    var vendor = navigator.vendor;  // Mozilla Firefox returns empty string
-    var cookie = navigator.cookieEnabled;
-    var java= navigator.javaEnabled();
+    let browser = navigator.userAgent;  // Get user's browser
+    let os = navigator.platform; 
+    let version = navigator.appVersion;
+    let vendor = navigator.vendor;  // Mozilla Firefox returns empty string
+    let cookie = navigator.cookieEnabled;
+    let java= navigator.javaEnabled();
 
-    var clientInfo = `<b>Browser:</b> ${browser}, <b>${vendor}</b></br>
+    let clientInfo = `<b>Browser:</b> ${browser}, <b>${vendor}</b></br>
         <b>OS Platform:</b> ${os}</br>
         <b>Browser Version:</b> ${version}</br>
         <b>Cookies Enabled:</b> ${cookie}</br>
@@ -213,13 +213,13 @@ const showClientInfo = () => {
 }
 
 const showUserInfo = () => {
-    var cookies = Cookies.get(); // get object of all cookies
+    let cookies = Cookies.get(); // get object of all cookies
 
     // Check if Cookie set
     if (cookies.username == null){ // Check if null and undefined simultaneously
         document.getElementById('userInfo').textContent = "Login to see User info!";
     } else {
-        var userInfo = `<b>UID:</b> ${cookies.uid}</br>
+        let userInfo = `<b>UID:</b> ${cookies.uid}</br>
         <b>Username:</b> ${cookies.username}</br>
         <b>Name:</b> ${cookies.name}</br>
         <b>Gender:</b> ${cookies.gender}</br>`;
@@ -275,7 +275,13 @@ $("#drawPie").click(e => {
   // Check if State(Bar, Pie) chosen
   if(choice === "Count"){
     drawPie(choice, "chart-div-1");
+    return;
   }
+
+  let errorInfo = "Cannot create a Pie Chart for selected Chart Option"
+
+  document.getElementById('errorInfo').textContent = errorInfo;
+  $('#errorModal').modal('toggle');
 
   console.log("Cannot use pie chart for selected chart...");
 });
