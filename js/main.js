@@ -341,6 +341,23 @@ $("#login").submit(e => {
 
 //------- End of Button Handlers -------------
 
+$(document).ready( () => {
+  let cookies = Cookies.get(); // get object of all cookies
+
+  // Check if Cookie set
+  if (cookies.username == null){ // Check if null and undefined simultaneously
+    document.getElementById('messageArea').textContent = "Login for more features!";
+  } else {
+    document.getElementById('messageArea').textContent = "Welcome, "+cookies.username;
+
+    // setup the navbar for logged in user
+    document.getElementById('loginDropmenu').style.display='none';
+    document.getElementById("username").textContent = cookies.username;
+    document.getElementById("username-item").style.display='block';
+    document.getElementById('sign-out').style.display='block';
+  }
+});
+
 //------- Clean Data from CSV File -----------
 const formatData = unformattedData => {
     var formattedData = [];
@@ -434,4 +451,3 @@ const exit = () => {
   // Clear Messages
   document.getElementById('messageArea').textContent = "Data has been cleared!";
 }
-//-------- End of Button Handlers ---------
