@@ -321,6 +321,7 @@ $("#login").submit(e => {
       document.getElementById("username").textContent = cookies.username;
       document.getElementById("username-item").style.display='block';
       document.getElementById('sign-out').style.display='block';
+      document.getElementById('messageArea').textContent = `Welcome, ${cookies.username}!`; 
 
       console.log("success");
       console.log(result);
@@ -334,7 +335,7 @@ $("#login").submit(e => {
       $('#errorModal').modal('toggle');
 
       console.log(errorInfo);
-      console.log(result);
+      
     }
   });
 });
