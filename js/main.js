@@ -323,6 +323,11 @@ $("#login").submit(e => {
       document.getElementById('sign-out').style.display='block';
       document.getElementById('messageArea').textContent = `Welcome, ${cookies.username}!`; 
 
+      // Remove Load Database buttons
+      document.getElementById('load-db-1').style.display='block';
+      document.getElementById('load-db-2').style.display='block';
+      document.getElementById('load-db-3').style.display='block';
+
       console.log("success");
       console.log(result);
     },
@@ -352,6 +357,11 @@ $("#sign-out").click( e => {
   document.getElementById("username-item").style.display='none';
   document.getElementById('sign-out').style.display='none';
 
+  // Remove Load Database buttons
+  document.getElementById('load-db-1').style.display='none';
+  document.getElementById('load-db-2').style.display='none';
+  document.getElementById('load-db-3').style.display='none';
+
   // Show Pop up Modal
   document.getElementById('popup-title').textContent = "Logged Out"; 
   document.getElementById('messageArea').textContent = "Login for more features"; 
@@ -376,6 +386,11 @@ $(document).ready( () => {
     document.getElementById("username").textContent = cookies.username;
     document.getElementById("username-item").style.display='block';
     document.getElementById('sign-out').style.display='block';
+
+    // Show load database buttons
+    document.getElementById('load-db-1').style.display='block';
+    document.getElementById('load-db-2').style.display='block';
+    document.getElementById('load-db-3').style.display='block';
   }
 });
 
