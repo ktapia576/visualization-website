@@ -303,6 +303,20 @@ $("#bothCharts").click(e => {
   drawCharts();
 });
 
+$("#load-db-1").click( e => {
+  $.ajax({
+    type:"POST",
+    url:"src/loadData.php",
+    data: {database: 1},
+    success: result => {
+      console.log(result);
+    },
+    error: result => {
+      console.log(result);
+    }
+  });
+});
+
 $("#login").submit(e => {
   e.preventDefault(); // avoid to execute the actual submit of the form.
 
@@ -317,7 +331,7 @@ $("#login").submit(e => {
     success: result => {
       let cookies = Cookies.get(); // get object of all cookies
 
-      document.getElementById('loginDropmenu').style.display='none';
+      document.getElementById('loginDropmenu').style.display='none';  // Make function for these later
       document.getElementById("username").textContent = cookies.username;
       document.getElementById("username-item").style.display='block';
       document.getElementById('sign-out').style.display='block';
@@ -339,7 +353,7 @@ $("#login").submit(e => {
       document.getElementById('errorInfo').textContent = errorInfo+message;
       $('#errorModal').modal('toggle');
 
-      console.log(errorInfo);
+      console.log(result);
       
     }
   });
