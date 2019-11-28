@@ -339,6 +339,26 @@ $("#login").submit(e => {
   });
 });
 
+$("#sign-out").click( e => {
+  // Remove all cookies
+  Cookies.remove("name"); 
+  Cookies.remove("gender"); 
+  Cookies.remove("uid"); 
+  Cookies.remove("username"); 
+
+  // Switch Login States
+  document.getElementById('loginDropmenu').style.display='block';
+  document.getElementById("username-item").style.display='none';
+  document.getElementById('sign-out').style.display='none';
+
+  // Show Pop up Modal
+  document.getElementById('popup-title').textContent = "Logged Out"; 
+  document.getElementById('messageArea').textContent = "Login for more features"; 
+  document.getElementById('popup-message').textContent = "Logout Successful!";  // Display you have been logged out
+  $('#popupModal').modal('toggle');
+  console.log("sign out");
+});
+
 //------- End of Button Handlers -------------
 
 $(document).ready( () => {
