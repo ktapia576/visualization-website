@@ -192,6 +192,19 @@ const drawPie = (choice, elementID) => {
   pieChart.draw(pieData, options);
 }
 
+const drawTable = data => {
+  $('.table').footable({
+    "paging": {
+        "enabled": true,
+        "size": 15
+    },
+    "sorting": {
+        "enabled": true
+    },
+    "columns": $.get("content/columns.json"),   // Load columns.json
+    "rows": data
+  });
+}
 
 //----------- Button Handlers -----------------
 const showClientInfo = () => {
@@ -307,21 +320,49 @@ $("#load-db-1").click( e => {
   $.ajax({
     type:"POST",
     url:"src/loadData.php",
-    data: {database: 1},
+    data: {database: "1"},
     success: result => {
       data = JSON.parse(result.data);
 
-      $('.table').footable({
-        "paging": {
-            "enabled": true,
-            "size": 15
-        },
-        "sorting": {
-            "enabled": true
-        },
-        "columns": $.get("content/columns.json"),   // Load columns.json
-        "rows": data
-      });
+      drawTable(data);
+
+      console.log(data);
+      console.log(result);
+    },
+    error: result => {
+      console.log(result);
+    }
+  });
+});
+
+$("#load-db-2").click( e => {
+  $.ajax({
+    type:"POST",
+    url:"src/loadData.php",
+    data: {database: "2"},
+    success: result => {
+      data = JSON.parse(result.data);
+
+      drawTable(data);
+
+      console.log(data);
+      console.log(result);
+    },
+    error: result => {
+      console.log(result);
+    }
+  });
+});
+
+$("#load-db-3").click( e => {
+  $.ajax({
+    type:"POST",
+    url:"src/loadData.php",
+    data: {database: "3"},
+    success: result => {
+      data = JSON.parse(result.data);
+
+      drawTable(data);
 
       console.log(data);
       console.log(result);
@@ -382,7 +423,7 @@ $("#sign-out").click( e => {
   Cookies.remove("username"); 
 
   // Switch Login States
-  document.getElementById('loginDropmenu').style.display='block';
+  document.getElementById('loginDropmenu').style.display='block'; // Make function for these
   document.getElementById("username-item").style.display='none';
   document.getElementById('sign-out').style.display='none';
 
