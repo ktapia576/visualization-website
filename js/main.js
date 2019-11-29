@@ -309,6 +309,21 @@ $("#load-db-1").click( e => {
     url:"src/loadData.php",
     data: {database: 1},
     success: result => {
+      data = JSON.parse(result.data);
+
+      $('.table').footable({
+        "paging": {
+            "enabled": true,
+            "size": 15
+        },
+        "sorting": {
+            "enabled": true
+        },
+        "columns": $.get("content/columns.json"),   // Load columns.json
+        "rows": data
+      });
+
+      console.log(data);
       console.log(result);
     },
     error: result => {
