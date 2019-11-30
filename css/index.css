@@ -129,3 +129,8 @@ table tr th {
   vertical-align: baseline;
   border-radius: .25em;
 }
+
+/* Leaflet map CSS */
+#mapid { 
+  height: 180px; 
+}
