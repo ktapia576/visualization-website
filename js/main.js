@@ -217,7 +217,9 @@ const drawMap = choice =>{
     data = cleanData(choice);
 
     statesData.features.forEach( row => {
-      row.properties[choice] = "0";
+      row.properties.AvgWages = "0";
+      row.properties.EstimatedPopulation = "0";
+      row.properties.Count = "0";
     });
 
     console.log(statesData);
@@ -301,8 +303,10 @@ const drawMap = choice =>{
 
   // method that we will use to update the control based on feature properties passed
   info.update = function (props) {
-      this._div.innerHTML = `<h4>US ${choice}</h4>` +  (props ? 
-        '<b>' + props.name + '</b><br />' + Number(props[choice]).toFixed(2) + ' ' + choice 
+      this._div.innerHTML = `<h4>US Count</h4>` +  (props ? 
+        `<b>${props.name}</b><br />${Number(props.AvgWages).toFixed(2)} AvgWages <br />
+        ${Number(props.EstimatedPopulation).toFixed(2)} AvgWages <br/>
+        ${Number(props.Count).toFixed(2)} AvgWages <br/>` 
         : 'Hover over a state');
   };
 
