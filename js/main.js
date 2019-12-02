@@ -147,6 +147,7 @@ const drawBar = (choice,elementID) => {
     dataArray.push(['State', choice]);
   
     var newData = cleanData(choice);
+    console.log(newData);
     newData.forEach(row => { dataArray.push(row)});
   
     var barData = google.visualization.arrayToDataTable(dataArray);
@@ -190,6 +191,135 @@ const drawPie = (choice, elementID) => {
 
   pieChart = new google.visualization.PieChart(document.getElementById(elementID));
   pieChart.draw(pieData, options);
+}
+
+const drawMap = () =>{
+  let mapboxAccessToken = 'pk.eyJ1Ijoia3RhcGlhNTc2IiwiYSI6ImNrM20ydzJnMzFheTIzZXQ3N3JwazU3N28ifQ.nuoJgYJoxVp0SHBzI5zyXg';
+  let map = L.map('mapid').setView([37.8, -96], 4);
+
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+      id: 'mapbox/light-v9',
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+  }).addTo(map);
+
+  let info = L.control();
+
+  let geojson;
+
+  const cleanStatesData = (statesData,data) => {
+    data = cleanData("AvgWages");
+
+    statesData.features.forEach(
+      row => {
+        data.forEach( item => {
+          let state = item[0];
+          let num = item[1];
+        
+          if(state === row.properties.abbr) {
+            row.properties["AvgWages"] = num;
+          }
+        });
+      }
+    );
+  }
+
+  const highlightFeature = e => {
+    let layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+
+    info.update(layer.feature.properties);
+  }
+
+  const resetHighlight = e => {
+    geojson.resetStyle(e.target);
+    info.update();
+  }
+
+  const zoomToFeature = e => {
+    map.fitBounds(e.target.getBounds());
+  }
+
+  const onEachFeature = (feature, layer) => {
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: zoomToFeature
+    });
+  }
+
+  const getColor = item => {
+    return item > 30000 ? '#084594' :
+      item > 25000  ? '#2171b5' :
+      item > 20000  ? '#4292c6' :
+      item > 15000  ? '#6baed6' :
+      item > 10000   ? '#9ecae1' :
+      item > 5000   ? '#c6dbef' :
+      item > 100   ? '#deebf7' :
+      '#f7fbff';
+  }
+
+  const style = feature => {
+    return {
+      fillColor: getColor(feature.properties.AvgWages),
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.7
+    };
+  }
+
+  info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      this.update();
+      return this._div;
+  };
+
+  // method that we will use to update the control based on feature properties passed
+  info.update = function (props) {
+      this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+          '<b>' + props.name + '</b><br />' + props.AvgWages.toFixed(2) + ' AvgWage'
+          : 'Hover over a state');
+  };
+
+  info.addTo(map);
+
+  var legend = L.control({position: 'bottomright'});
+
+  legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 100, 5000, 10000, 15000, 20000, 25000, 30000],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+  };
+
+  legend.addTo(map);
+
+  cleanStatesData(statesData,data);
+
+  geojson = L.geoJson(statesData, {
+    style: style,
+    onEachFeature: onEachFeature
+  }).addTo(map);
 }
 
 const drawTable = data => {
@@ -307,19 +437,14 @@ $("#drawPie").click(e => {
   console.log("Cannot use pie chart for selected chart...");
 });
 
-$("#drawMap").click(e => {
+//---------- Map functions ----------------------
+ $("#drawMap").click(e => {
   clearCharts();
-  let mymap = L.map('mapid').setView([40.6619, -74.273], 14);
-    
-  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia3RhcGlhNTc2IiwiYSI6ImNrM20ydzJnMzFheTIzZXQ3N3JwazU3N28ifQ.nuoJgYJoxVp0SHBzI5zyXg', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    accessToken: 'pk.eyJ1Ijoia3RhcGlhNTc2IiwiYSI6ImNrM20ydzJnMzFheTIzZXQ3N3JwazU3N28ifQ.nuoJgYJoxVp0SHBzI5zyXg'
-  }).addTo(mymap);
-
+ 
+  drawMap();
   console.log("Draw Map has been called...");
 });
+
 
 $("#bothCharts").click(e => {
   drawCharts();
