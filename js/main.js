@@ -11,6 +11,7 @@ let data = null;
 let pieChart = null;
 let barChart = null;
 let lineChart = null;
+let maxNum = null;
 //----------- End of Global Variables -----------
 
 const clearCharts = () => {
@@ -53,6 +54,7 @@ const checkChoice = () => {
 const cleanData = choice => {
     var states =[];
     var newData=[];
+    let nums=[];
   
     // Get states
     data.forEach( row => { 
@@ -77,7 +79,6 @@ const cleanData = choice => {
             }
           }
         });
-  
         newData.push([state, total/count]);
         total=0;
         count=0;
@@ -86,7 +87,7 @@ const cleanData = choice => {
       states.forEach(state => {
         data.forEach(dataRow => {
           if(state == dataRow.State){
-            if(isNaN(Number(dataRow.AvgWages))){
+            if(isNaN(Number(dataRow.EstimatedPopulation))){
               // skip
             } else {
               total = total + Number(dataRow.EstimatedPopulation);
@@ -114,6 +115,12 @@ const cleanData = choice => {
     } else {
       console.log("Error with choice");
     }
+    newData.forEach(row => { nums.push(Number(row[1])); });
+
+    console.log(newData);
+    console.log(nums);
+    maxNum = Math.max(...nums);
+    console.log(maxNum);
     return newData;
 }
 
@@ -196,18 +203,24 @@ const drawPie = (choice, elementID) => {
 const drawMap = choice =>{
   let mapboxAccessToken = 'pk.eyJ1Ijoia3RhcGlhNTc2IiwiYSI6ImNrM20ydzJnMzFheTIzZXQ3N3JwazU3N28ifQ.nuoJgYJoxVp0SHBzI5zyXg';
   let map = L.map('mapid').setView([37.8, -96], 4);
+  let info = L.control();
+  let geojson;
 
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
       id: 'mapbox/light-v9',
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
   }).addTo(map);
 
-  let info = L.control();
 
-  let geojson;
 
   const cleanStatesData = (statesData,data,choice) => {
     data = cleanData(choice);
+
+    statesData.features.forEach( row => {
+      row.properties[choice] = "0";
+    });
+
+    console.log(statesData);
 
     statesData.features.forEach(
       row => {
@@ -258,19 +271,20 @@ const drawMap = choice =>{
   }
 
   const getColor = item => {
-    return item > 30000 ? '#084594' :
-      item > 25000  ? '#2171b5' :
-      item > 20000  ? '#4292c6' :
-      item > 15000  ? '#6baed6' :
-      item > 10000   ? '#9ecae1' :
-      item > 5000   ? '#c6dbef' :
-      item > 100   ? '#deebf7' :
-      '#f7fbff';
+    item = item/maxNum;
+    console.log(item);
+    return item > .9 ? '#084594' :
+      item > .75  ? '#2171b5' :
+      item > .6  ? '#4292c6' :
+      item > .45  ? '#6baed6' :
+      item > .3   ? '#9ecae1' :
+      item > .15   ? '#c6dbef' :
+      '#eff3ff';
   }
 
   const style = feature => {
     return {
-      fillColor: getColor(feature.properties.AvgWages),
+      fillColor: getColor(feature.properties[choice]),
       weight: 2,
       opacity: 1,
       color: 'white',
@@ -287,9 +301,9 @@ const drawMap = choice =>{
 
   // method that we will use to update the control based on feature properties passed
   info.update = function (props) {
-      this._div.innerHTML = `<h4>US ${choice}</h4>` +  (props ?
-          '<b>' + props.name + '</b><br />' + props[choice].toFixed(2) + ' ' + choice
-          : 'Hover over a state');
+      this._div.innerHTML = `<h4>US ${choice}</h4>` +  (props ? 
+        '<b>' + props.name + '</b><br />' + Number(props[choice]).toFixed(2) + ' ' + choice 
+        : 'Hover over a state');
   };
 
   info.addTo(map);
@@ -299,14 +313,14 @@ const drawMap = choice =>{
   legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 100, 5000, 10000, 15000, 20000, 25000, 30000],
-        labels = [];
+        colors = ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#084594'],
+        labels = ['15%', '30%', '45%', '60%', '75%', '90%', '100%'];
 
     // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
+    for (var i = 0; i < colors.length; i++) {
         div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            '<i style="background:' + colors[i] + '"></i> <' +
+            labels[i] +'<br>';
     }
 
     return div;
