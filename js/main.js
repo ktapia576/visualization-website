@@ -193,7 +193,7 @@ const drawPie = (choice, elementID) => {
   pieChart.draw(pieData, options);
 }
 
-const drawMap = () =>{
+const drawMap = choice =>{
   let mapboxAccessToken = 'pk.eyJ1Ijoia3RhcGlhNTc2IiwiYSI6ImNrM20ydzJnMzFheTIzZXQ3N3JwazU3N28ifQ.nuoJgYJoxVp0SHBzI5zyXg';
   let map = L.map('mapid').setView([37.8, -96], 4);
 
@@ -206,8 +206,8 @@ const drawMap = () =>{
 
   let geojson;
 
-  const cleanStatesData = (statesData,data) => {
-    data = cleanData("AvgWages");
+  const cleanStatesData = (statesData,data,choice) => {
+    data = cleanData(choice);
 
     statesData.features.forEach(
       row => {
@@ -216,7 +216,7 @@ const drawMap = () =>{
           let num = item[1];
         
           if(state === row.properties.abbr) {
-            row.properties["AvgWages"] = num;
+            row.properties[choice] = num;
           }
         });
       }
@@ -287,8 +287,8 @@ const drawMap = () =>{
 
   // method that we will use to update the control based on feature properties passed
   info.update = function (props) {
-      this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-          '<b>' + props.name + '</b><br />' + props.AvgWages.toFixed(2) + ' AvgWage'
+      this._div.innerHTML = `<h4>US ${choice}</h4>` +  (props ?
+          '<b>' + props.name + '</b><br />' + props[choice].toFixed(2) + ' ' + choice
           : 'Hover over a state');
   };
 
@@ -314,7 +314,7 @@ const drawMap = () =>{
 
   legend.addTo(map);
 
-  cleanStatesData(statesData,data);
+  cleanStatesData(statesData,data,choice);
 
   geojson = L.geoJson(statesData, {
     style: style,
@@ -439,10 +439,11 @@ $("#drawPie").click(e => {
 
 //---------- Map functions ----------------------
  $("#drawMap").click(e => {
+  let choice = checkChoice();
   clearCharts();
  
-  drawMap();
-  console.log("Draw Map has been called...");
+  drawMap(choice);
+  console.log(`Draw Map has been called... for ${choice}`);
 });
 
 
