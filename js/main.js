@@ -118,7 +118,6 @@ const cleanData = choice => {
     newData.forEach(row => { nums.push(Number(row[1])); });
 
     console.log(newData);
-    console.log(nums);
     maxNum = Math.max(...nums);
     console.log(maxNum);
     return newData;
@@ -200,7 +199,7 @@ const drawPie = (choice, elementID) => {
   pieChart.draw(pieData, options);
 }
 
-const drawMap = choice =>{
+const drawMap = () => {
   let mapboxAccessToken = 'pk.eyJ1Ijoia3RhcGlhNTc2IiwiYSI6ImNrM20ydzJnMzFheTIzZXQ3N3JwazU3N28ifQ.nuoJgYJoxVp0SHBzI5zyXg';
   let map = L.map('mapid').setView([37.8, -96], 4);
   let info = L.control();
@@ -212,17 +211,21 @@ const drawMap = choice =>{
   }).addTo(map);
 
 
-
-  const cleanStatesData = (statesData,data,choice) => {
-    data = cleanData(choice);
-
+  const formatStatesData = statesData => {
     statesData.features.forEach( row => {
       row.properties.AvgWages = "0";
       row.properties.EstimatedPopulation = "0";
       row.properties.Count = "0";
     });
 
-    console.log(statesData);
+    return statesData;
+  }
+
+  const cleanStatesData = (statesData,data,choice) => {
+    data = cleanData(choice);
+    console.log('data: ', choice ,data);
+
+    console.log('states Data 1:', choice ,JSON.stringify(statesData));
 
     statesData.features.forEach(
       row => {
@@ -232,10 +235,12 @@ const drawMap = choice =>{
         
           if(state === row.properties.abbr) {
             row.properties[choice] = num;
+            console.log(row.properties[choice])
           }
         });
       }
     );
+    console.log('states Data 2:', choice ,JSON.stringify(statesData));
   }
 
   const highlightFeature = e => {
@@ -274,7 +279,7 @@ const drawMap = choice =>{
 
   const getColor = item => {
     item = item/maxNum;
-    console.log(item);
+
     return item > .9 ? '#084594' :
       item > .75  ? '#2171b5' :
       item > .6  ? '#4292c6' :
@@ -286,7 +291,7 @@ const drawMap = choice =>{
 
   const style = feature => {
     return {
-      fillColor: getColor(feature.properties[choice]),
+      fillColor: getColor(feature.properties.Count),
       weight: 2,
       opacity: 1,
       color: 'white',
@@ -332,7 +337,11 @@ const drawMap = choice =>{
 
   legend.addTo(map);
 
-  cleanStatesData(statesData,data,choice);
+  statesData = formatStatesData(statesData);
+
+  cleanStatesData(statesData,data,"AvgWages");
+  cleanStatesData(statesData,data,"EstimatedPopulation");
+  cleanStatesData(statesData,data,"Count");
 
   geojson = L.geoJson(statesData, {
     style: style,
@@ -457,11 +466,10 @@ $("#drawPie").click(e => {
 
 //---------- Map functions ----------------------
  $("#drawMap").click(e => {
-  let choice = checkChoice();
   clearCharts();
  
-  drawMap(choice);
-  console.log(`Draw Map has been called... for ${choice}`);
+  drawMap();
+  console.log(`Draw Map has been called...`);
 });
 
 
@@ -478,9 +486,6 @@ $("#load-db-1").click( e => {
       data = JSON.parse(result.data);
 
       drawTable(data);
-
-      console.log(data);
-      console.log(result);
     },
     error: result => {
       console.log(result);
