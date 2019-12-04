@@ -117,9 +117,9 @@ const cleanData = choice => {
     }
     newData.forEach(row => { nums.push(Number(row[1])); });
 
-    console.log(newData);
+    // console.log(newData);
     maxNum = Math.max(...nums);
-    console.log(maxNum);
+    // console.log(maxNum);
     return newData;
 }
 
@@ -221,11 +221,28 @@ const drawMap = () => {
     return statesData;
   }
 
+  const removeNullStates = statesData => {
+    let cleanData =  JSON.parse(JSON.stringify(statesData)); // copy object to new variable
+    cleanData.features = [];
+
+    console.log(cleanData);
+    console.log(statesData);
+
+    statesData.features.forEach( row => {
+      console.log(Number(row.properties.Count));
+      if(Number(row.properties.Count) !== 0){
+        cleanData.features.push(row);
+        console.log(row);
+      }
+      console.log("i work");
+    });
+    console.log("here2");
+
+    return cleanData;
+  }
+
   const cleanStatesData = (statesData,data,choice) => {
     data = cleanData(choice);
-    console.log('data: ', choice ,data);
-
-    console.log('states Data 1:', choice ,JSON.stringify(statesData));
 
     statesData.features.forEach(
       row => {
@@ -235,12 +252,10 @@ const drawMap = () => {
         
           if(state === row.properties.abbr) {
             row.properties[choice] = num;
-            console.log(row.properties[choice])
           }
         });
       }
     );
-    console.log('states Data 2:', choice ,JSON.stringify(statesData));
   }
 
   const highlightFeature = e => {
@@ -310,8 +325,8 @@ const drawMap = () => {
   info.update = function (props) {
       this._div.innerHTML = `<h4>US Count</h4>` +  (props ? 
         `<b>${props.name}</b><br />${Number(props.AvgWages).toFixed(2)} AvgWages <br />
-        ${Number(props.EstimatedPopulation).toFixed(2)} AvgWages <br/>
-        ${Number(props.Count).toFixed(2)} AvgWages <br/>` 
+        ${Number(props.EstimatedPopulation).toFixed(2)} EstimatedPopulation <br/>
+        ${Number(props.Count).toFixed(2)} Count <br/>` 
         : 'Hover over a state');
   };
 
@@ -337,11 +352,16 @@ const drawMap = () => {
 
   legend.addTo(map);
 
+      
+  console.log(JSON.stringify(statesData));
   statesData = formatStatesData(statesData);
 
+  cleanStatesData(statesData,data,"Count");
   cleanStatesData(statesData,data,"AvgWages");
   cleanStatesData(statesData,data,"EstimatedPopulation");
-  cleanStatesData(statesData,data,"Count");
+  
+  console.log(JSON.stringify(statesData));
+  statesData = removeNullStates(statesData);
 
   geojson = L.geoJson(statesData, {
     style: style,
