@@ -356,10 +356,10 @@ const drawMap = () => {
   console.log(JSON.stringify(statesData));
   statesData = formatStatesData(statesData);
 
-  cleanStatesData(statesData,data,"Count");
   cleanStatesData(statesData,data,"AvgWages");
   cleanStatesData(statesData,data,"EstimatedPopulation");
-  
+  cleanStatesData(statesData,data,"Count"); // make sure last to set maxNum
+
   console.log(JSON.stringify(statesData));
   statesData = removeNullStates(statesData);
 
