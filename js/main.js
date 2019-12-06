@@ -35,6 +35,7 @@ const clearWorkspace = () => {
   // remove table
   $("table").empty(); // removes all child nodes and content from the selected elements
 
+  document.getElementById('mapid').style.display='none';
   clearCharts();
 }
 
