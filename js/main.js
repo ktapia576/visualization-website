@@ -12,6 +12,7 @@ let pieChart = null;
 let barChart = null;
 let lineChart = null;
 let maxNum = null;
+let mapDrawn = false;
 //----------- End of Global Variables -----------
 
 const clearCharts = () => {
@@ -23,6 +24,9 @@ const clearCharts = () => {
   }
   if (lineChart != null){
     lineChart.clearChart();
+  }
+  if (mapDrawn) {
+    document.getElementById('mapid').style.display='none';
   }
 }
 
@@ -487,7 +491,9 @@ $("#drawPie").click(e => {
 //---------- Map functions ----------------------
  $("#drawMap").click(e => {
   clearCharts();
- 
+  mapDrawn=true;
+
+  document.getElementById('mapid').style.display='block';
   drawMap();
   console.log(`Draw Map has been called...`);
 });
