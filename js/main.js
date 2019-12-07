@@ -739,6 +739,16 @@ const exit = () => {
   // remove table
   $("table").empty(); // removes all child nodes and content from the selected elements
 
+  // Switch Login States
+  document.getElementById('loginDropmenu').style.display='block'; // Make function for these
+  document.getElementById("username-item").style.display='none';
+  document.getElementById('sign-out').style.display='none';
+
+  // Remove Load Database buttons
+  document.getElementById('load-db-1').style.display='none';
+  document.getElementById('load-db-2').style.display='none';
+  document.getElementById('load-db-3').style.display='none';
+
   // Clear Messages
   document.getElementById('messageArea').textContent = "Data has been cleared!";
 }
