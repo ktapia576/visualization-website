@@ -164,10 +164,14 @@
                         <span class="d-flex align-items-center text-muted" data-feather="tool"></span>
                     </h6>
                     <div class="form-group mx-3">
-                        <label for="customRange1">Slide for Cell Highlighting:</label>
-                        <input type="range" class="custom-range" min="0" max="1000" step="1" id="customRange1" oninput="rangeValue.value = 'Value: '+ customRange1.value">
-                        <p class="text-center"><output name="rangeValue" id="rangeValue"></output></p>
-                    </div>    
+                        <label for="estimatedPopulationsSlider">Slide for EstimatedPopulation:</label>
+                        <input type="range" class="custom-range" min="0" max="1000" step="1" id="estimatedPopulationsSlider" oninput="rangeValue1.value = 'Value: '+ estimatedPopulationsSlider.value">
+                        <p class="text-center mb-0"><output name="rangeValue" id="rangeValue1">Value: </output></p>
+
+                        <label for="AvgWages">Slide for AvgWages:</label>
+                        <input type="range" class="custom-range" min="0" max="1000" step="1" id="AvgWagesSlider" oninput="rangeValue2.value = 'Value: '+ AvgWagesSlider.value">
+                        <p class="text-center"><output name="rangeValue" id="rangeValue2">Value: </output></p>
+                    </div>
                     <!-- End of Slider -->  
                 </div>
             </div>
@@ -184,7 +188,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                     <h1 class="h2">Table</h1>
                 </div>
-                <table class="table table-bordered table-hover table-sm"></table>
+                <table class="table table-bordered table-hover table-sm" id="table"></table>
             </main>
             <!-- End of Main Content-->
             <!-- Load Icons After Page load -->

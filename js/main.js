@@ -12,6 +12,8 @@ let pieChart = null;
 let barChart = null;
 let lineChart = null;
 let maxNum = null;
+let maxNumPopulation = null;
+let maxNumWages = null; 
 let mapDrawn = false;
 //----------- End of Global Variables -----------
 
@@ -30,6 +32,26 @@ const clearCharts = () => {
   }
 }
 
+const setSliderValues = () => {
+  //$('#estimatedPopulationsSlider').attr('min', maxNumPopulation);
+  $('#estimatedPopulationsSlider').attr('max', maxNumPopulation);
+
+  //$('#AvgWagesSlider').attr('min', A_Route[0]);
+  $('#AvgWagesSlider').attr('max', maxNumWages);
+}
+
+const colorTable = () => {
+  var table = FooTable.get("#table");
+    
+  // index 4 is Estimated population | index 5 is AvgWages
+
+  $('#table > tbody  > tr').each(function(index, tr) { 
+    console.log(index);
+    $(tr.cells[4]).addClass("text-success");
+    // $(tr.cells[4]).removeClass("bg-success");
+    console.log(tr.cells[4].innerHTML);
+  });
+}
 
 const clearWorkspace = () => {
   // remove table
@@ -56,10 +78,31 @@ const checkChoice = () => {
   return choice;
 }
 
+const getMaxNums = () => {
+  let highestNumPopulation = [];
+  let highestNumAvgWages = [];
+
+  console.log(data);
+
+  data.forEach(row => { 
+    highestNumPopulation.push(Number(row.EstimatedPopulation)); 
+    highestNumAvgWages.push(Number(row.AvgWages));
+  });
+
+  maxNumPopulation = Math.max(...highestNumPopulation);
+  maxNumWages = Math.max(...highestNumAvgWages);
+
+  console.log(maxNumPopulation);
+
+  console.log(maxNumWages);
+}
+
 const cleanData = choice => {
     var states =[];
     var newData=[];
     let nums=[];
+
+    // console.log(data.length);
   
     // Get states
     data.forEach( row => { 
@@ -124,7 +167,7 @@ const cleanData = choice => {
 
     // console.log(newData);
     maxNum = Math.max(...nums);
-    // console.log(maxNum);
+
     return newData;
 }
 
@@ -499,6 +542,13 @@ $("#drawPie").click(e => {
   console.log(`Draw Map has been called...`);
 });
 
+$('#estimatedPopulationsSlider').on('change', function() {
+  console.log( this.value );
+});
+
+$('#AvgWagesSlider').on('change', function() {
+  console.log( this.value );
+});
 
 $("#bothCharts").click(e => {
   drawCharts();
@@ -511,6 +561,9 @@ $("#load-db-1").click( e => {
     data: {database: "1"},
     success: result => {
       data = JSON.parse(result.data);
+
+      getMaxNums();
+      setSliderValues();
 
       drawTable(data);
     },
@@ -530,6 +583,9 @@ $("#load-db-2").click( e => {
 
       drawTable(data);
 
+      getMaxNums();
+      setSliderValues();
+
       console.log(data);
       console.log(result);
     },
@@ -548,6 +604,9 @@ $("#load-db-3").click( e => {
       data = JSON.parse(result.data);
 
       drawTable(data);
+
+      getMaxNums();
+      setSliderValues();
 
       console.log(data);
       console.log(result);
@@ -700,6 +759,9 @@ const loadFile = () => {
 
           data = formatData(unformattedData);
           console.log("Data:", data);
+
+          getMaxNums();
+          setSliderValues();
 
           $('.table').footable({
               "paging": {
