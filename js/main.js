@@ -14,6 +14,8 @@ let lineChart = null;
 let maxNum = null;
 let maxNumPopulation = null;
 let maxNumWages = null; 
+let minNumPopulation = null;
+let minNumWages = null; 
 let mapDrawn = false;
 //----------- End of Global Variables -----------
 
@@ -33,10 +35,10 @@ const clearCharts = () => {
 }
 
 const setSliderValues = () => {
-  //$('#estimatedPopulationsSlider').attr('min', maxNumPopulation);
+  $('#estimatedPopulationsSlider').attr('min', minNumPopulation);
   $('#estimatedPopulationsSlider').attr('max', maxNumPopulation);
 
-  //$('#AvgWagesSlider').attr('min', A_Route[0]);
+  $('#AvgWagesSlider').attr('min', minNumWages);
   $('#AvgWagesSlider').attr('max', maxNumWages);
 }
 
@@ -95,6 +97,25 @@ const getMaxNums = () => {
   console.log(maxNumPopulation);
 
   console.log(maxNumWages);
+}
+
+const getMinNums = () => {
+  let lowestNumPopulation = [];
+  let lowestNumAvgWages = [];
+
+  console.log(data);
+
+  data.forEach(row => { 
+    lowestNumPopulation.push(Number(row.EstimatedPopulation)); 
+    lowestNumAvgWages.push(Number(row.AvgWages));
+  });
+
+  minNumPopulation = Math.min(...lowestNumPopulation);
+  minNumWages = Math.min(...lowestNumAvgWages);
+
+  console.log(minNumPopulation);
+
+  console.log(minNumWages);
 }
 
 const cleanData = choice => {
@@ -563,6 +584,7 @@ $("#load-db-1").click( e => {
       data = JSON.parse(result.data);
 
       getMaxNums();
+      getMinNums();
       setSliderValues();
 
       drawTable(data);
@@ -584,6 +606,7 @@ $("#load-db-2").click( e => {
       drawTable(data);
 
       getMaxNums();
+      getMinNums();
       setSliderValues();
 
       console.log(data);
@@ -606,6 +629,7 @@ $("#load-db-3").click( e => {
       drawTable(data);
 
       getMaxNums();
+      getMinNums();
       setSliderValues();
 
       console.log(data);
@@ -761,6 +785,7 @@ const loadFile = () => {
           console.log("Data:", data);
 
           getMaxNums();
+          getMinNums();
           setSliderValues();
 
           $('.table').footable({
