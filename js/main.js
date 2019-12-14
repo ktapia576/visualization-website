@@ -42,14 +42,31 @@ const setSliderValues = () => {
   $('#AvgWagesSlider').attr('max', maxNumWages);
 }
 
-const colorTable = () => {
-  var table = FooTable.get("#table");
-    
+const colorTablePopulation = () => {
   // index 4 is Estimated population | index 5 is AvgWages
 
   $('#table > tbody  > tr').each(function(index, tr) { 
-    console.log(index);
-    $(tr.cells[4]).addClass("text-success");
+    let cellNum = tr.cells[4];
+
+    if(cellNum ){
+
+    }
+
+    $(cellNum).addClass("text-success");
+    // $(tr.cells[4]).removeClass("bg-success");
+    console.log(tr.cells[4].innerHTML);
+  });
+}
+
+const colorTableWages = () => {
+  // index 4 is Estimated population | index 5 is AvgWages
+
+  $('#table > tbody  > tr').each(function(index, tr) { 
+    let cellNum = tr.cells[5];
+
+    console.log(`slider value: ${$('#AvgWagesSlider').val()}`);
+
+    $(cellNum).addClass("text-success");
     // $(tr.cells[4]).removeClass("bg-success");
     console.log(tr.cells[4].innerHTML);
   });
@@ -87,8 +104,8 @@ const getMaxNums = () => {
   console.log(data);
 
   data.forEach(row => { 
-    highestNumPopulation.push(Number(row.EstimatedPopulation)); 
-    highestNumAvgWages.push(Number(row.AvgWages));
+    highestNumPopulation.push(Math.ceil(Number(row.EstimatedPopulation))); 
+    highestNumAvgWages.push(Math.ceil(Number(row.AvgWages)));
   });
 
   maxNumPopulation = Math.max(...highestNumPopulation);
@@ -106,8 +123,8 @@ const getMinNums = () => {
   console.log(data);
 
   data.forEach(row => { 
-    lowestNumPopulation.push(Number(row.EstimatedPopulation)); 
-    lowestNumAvgWages.push(Number(row.AvgWages));
+    lowestNumPopulation.push(Math.ceil(Number(row.EstimatedPopulation))); 
+    lowestNumAvgWages.push(Math.ceil(Number(row.AvgWages)));
   });
 
   minNumPopulation = Math.min(...lowestNumPopulation);
@@ -564,10 +581,12 @@ $("#drawPie").click(e => {
 });
 
 $('#estimatedPopulationsSlider').on('change', function() {
+  colorTablePopulation();
   console.log( this.value );
 });
 
 $('#AvgWagesSlider').on('change', function() {
+  colorTableWages();
   console.log( this.value );
 });
 
