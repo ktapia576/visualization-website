@@ -46,15 +46,17 @@ const colorTablePopulation = () => {
   // index 4 is Estimated population | index 5 is AvgWages
 
   $('#table > tbody  > tr').each(function(index, tr) { 
-    let cellNum = Number(tr.cells[4].innerHTML);
+    let cellNum = parseFloat(tr.cells[4].innerHTML.replace(/,/g, ''));
     let sliderVal = $('#estimatedPopulationsSlider').val();
 
     if(cellNum > sliderVal){
-      $(cellNum).addClass("text-success");
+      $(tr.cells[4]).addClass("text-success");
+    } else {
+      $(tr.cells[4]).removeClass("text-success");
     }
 
     // $(tr.cells[4]).removeClass("bg-success");
-    console.log(tr.cells[4].innerHTML);
+    // console.log(tr.cells[4].innerHTML);
   });
 }
 
