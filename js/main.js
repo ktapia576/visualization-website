@@ -46,13 +46,13 @@ const colorTablePopulation = () => {
   // index 4 is Estimated population | index 5 is AvgWages
 
   $('#table > tbody  > tr').each(function(index, tr) { 
-    let cellNum = tr.cells[4];
+    let cellNum = Number(tr.cells[4].innerHTML);
+    let sliderVal = $('#estimatedPopulationsSlider').val();
 
-    if(cellNum ){
-
+    if(cellNum > sliderVal){
+      $(cellNum).addClass("text-success");
     }
 
-    $(cellNum).addClass("text-success");
     // $(tr.cells[4]).removeClass("bg-success");
     console.log(tr.cells[4].innerHTML);
   });
@@ -62,13 +62,23 @@ const colorTableWages = () => {
   // index 4 is Estimated population | index 5 is AvgWages
 
   $('#table > tbody  > tr').each(function(index, tr) { 
-    let cellNum = tr.cells[5];
+    let cellNum = parseFloat(tr.cells[5].innerHTML.replace(/,/g, ''));
+    
+    let sliderVal = Number($('#AvgWagesSlider').val());
 
-    console.log(`slider value: ${$('#AvgWagesSlider').val()}`);
+    // console.log(cellNum);
+    console.log(sliderVal);
 
-    $(cellNum).addClass("text-success");
-    // $(tr.cells[4]).removeClass("bg-success");
-    console.log(tr.cells[4].innerHTML);
+    if(cellNum > sliderVal){
+      $(tr.cells[5]).addClass("text-success");
+    } else {
+      $(tr.cells[5]).removeClass("text-success");
+    }
+
+    // console.log(`slider value: ${$('#AvgWagesSlider').val()}`);
+
+    // $(tr.cells[5]).removeClass("bg-success");
+    // console.log(tr.cells[5].innerHTML);
   });
 }
 
