@@ -47,7 +47,7 @@ const colorTablePopulation = () => {
 
   $('#table > tbody  > tr').each(function(index, tr) { 
     let cellNum = parseFloat(tr.cells[4].innerHTML.replace(/,/g, ''));
-    let sliderVal = $('#estimatedPopulationsSlider').val();
+    let sliderVal = Number($('#estimatedPopulationsSlider').val());
 
     if(cellNum > sliderVal){
       $(tr.cells[4]).addClass("text-success");
@@ -482,6 +482,33 @@ const drawTable = data => {
 }
 
 //----------- Button Handlers -----------------
+const saveSetting = () => {
+  let cookies = Cookies.get(); // get object of all cookies
+
+  let uidNum = Number(cookies.uid);
+  let wagesNum = Number($('#AvgWagesSlider').val());  
+  let populationNum = Number($('#estimatedPopulationsSlider').val())
+
+  $.ajax({
+    type:"POST",
+    url:"src/saveSettings.php",
+    data: {
+      uid: uidNum,
+      login: cookies.username,
+      AvgWages: wagesNum,
+      EstimatedPopulation: populationNum
+    },
+    success: result => {
+      let message = result.message;
+      console.log(result);
+    },
+    error: result => {
+      console.log(result);
+      console.log(result.message);
+    }
+  });
+}
+
 const showClientInfo = () => {
     let browser = navigator.userAgent;  // Get user's browser
     let os = navigator.platform; 
@@ -697,6 +724,9 @@ $("#login").submit(e => {
       document.getElementById('load-db-2').style.display='block';
       document.getElementById('load-db-3').style.display='block';
 
+      // Set Save Setting Buttons
+      $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+
       console.log("success");
       console.log(result);
     },
@@ -735,6 +765,10 @@ $("#sign-out").click( e => {
   document.getElementById('popup-title').textContent = "Logged Out"; 
   document.getElementById('messageArea').textContent = "Login for more features"; 
   document.getElementById('popup-message').textContent = "Logout Successful!";  // Display you have been logged out
+
+  // Set Save Setting Buttons
+  $('#saveSetting').prop("disabled", true); // Element(s) are now disabled.
+
   $('#popupModal').modal('toggle');
   console.log("sign out");
 });
@@ -760,6 +794,9 @@ $(document).ready( () => {
     document.getElementById('load-db-1').style.display='block';
     document.getElementById('load-db-2').style.display='block';
     document.getElementById('load-db-3').style.display='block';
+
+    // Set Save Setting Buttons
+    $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
   }
 });
 
