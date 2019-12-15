@@ -37,9 +37,13 @@ const clearCharts = () => {
 const setSliderValues = () => {
   $('#estimatedPopulationsSlider').attr('min', minNumPopulation);
   $('#estimatedPopulationsSlider').attr('max', maxNumPopulation);
-
+  $('#estimatedPopulationsSlider').val(Math.ceil(getAvgPopulation()));
+  document.getElementById('rangeValue1').textContent = `Value: ${Math.ceil(getAvgPopulation())}`;
+  
   $('#AvgWagesSlider').attr('min', minNumWages);
   $('#AvgWagesSlider').attr('max', maxNumWages);
+  $('#AvgWagesSlider').val(Math.ceil(getAvgAvgWages()));
+  document.getElementById('rangeValue2').textContent = `Value: ${Math.ceil(getAvgAvgWages())}`;
 }
 
 const colorTablePopulation = () => {
@@ -72,9 +76,9 @@ const colorTableWages = () => {
     console.log(sliderVal);
 
     if(cellNum > sliderVal){
-      $(tr.cells[5]).addClass("text-success");
+      $(tr.cells[5]).addClass("text-danger");
     } else {
-      $(tr.cells[5]).removeClass("text-success");
+      $(tr.cells[5]).removeClass("text-danger");
     }
 
     // console.log(`slider value: ${$('#AvgWagesSlider').val()}`);
@@ -107,6 +111,42 @@ const checkChoice = () => {
   }
 
   return choice;
+}
+
+const getAvgAvgWages = () => {
+  let nums = [];
+  let sum = 0;
+  let avg = 0;
+
+  data.forEach(row => { 
+    nums.push(Math.ceil(Number(row.AvgWages)));
+  });
+
+  for (let i = 0; i<nums.length; i++) {
+    sum += nums[i];
+  }
+
+  avg = sum/(nums.length);
+
+  return avg;
+}
+
+const getAvgPopulation = () => {
+  let nums = [];
+  let sum = 0;
+  let avg = 0;
+
+  data.forEach(row => { 
+    nums.push(Math.ceil(Number(row.EstimatedPopulation)));
+  });
+
+  for (let i = 0; i<nums.length; i++) {
+    sum += nums[i];
+  }
+
+  avg = sum/(nums.length);
+
+  return avg;
 }
 
 const getMaxNums = () => {
@@ -508,6 +548,11 @@ const saveSetting = () => {
     }
   });
 }
+
+$("#colorTable").click( e => {
+  colorTablePopulation();
+  colorTableWages();
+});
 
 const showClientInfo = () => {
     let browser = navigator.userAgent;  // Get user's browser
