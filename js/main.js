@@ -53,7 +53,7 @@ const colorTablePopulation = () => {
     let cellNum = parseFloat(tr.cells[4].innerHTML.replace(/,/g, ''));
     let sliderVal = Number($('#estimatedPopulationsSlider').val());
 
-    if(cellNum > sliderVal){
+    if(cellNum >= sliderVal){
       $(tr.cells[4]).addClass("text-success");
     } else {
       $(tr.cells[4]).removeClass("text-success");
@@ -75,7 +75,7 @@ const colorTableWages = () => {
     // console.log(cellNum);
     console.log(sliderVal);
 
-    if(cellNum > sliderVal){
+    if(cellNum >= sliderVal){
       $(tr.cells[5]).addClass("text-danger");
     } else {
       $(tr.cells[5]).removeClass("text-danger");
