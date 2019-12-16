@@ -680,6 +680,7 @@ $("#bothCharts").click(e => {
 
 $("#load-db-1").click( e => {
   clearWorkspace();
+  clearCharts();
 
   $.ajax({
     type:"POST",
@@ -702,6 +703,7 @@ $("#load-db-1").click( e => {
 
 $("#load-db-2").click( e => {
   clearWorkspace();
+  clearCharts();
   
   $.ajax({
     type:"POST",
@@ -727,6 +729,7 @@ $("#load-db-2").click( e => {
 
 $("#load-db-3").click( e => {
   clearWorkspace();
+  clearCharts();
 
   $.ajax({
     type:"POST",
