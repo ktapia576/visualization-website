@@ -851,6 +851,9 @@ $("#sign-out").click( e => {
 $(document).ready( () => {
   let cookies = Cookies.get(); // get object of all cookies
 
+    // Default disable button
+    $('#saveSetting').prop("disabled", true); // Element(s) are now disabled.
+
   // Check if Cookie set
   if (cookies.username == null){ // Check if null and undefined simultaneously
     document.getElementById('messageArea').textContent = "Login for more features!";
