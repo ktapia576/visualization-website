@@ -541,6 +541,9 @@ const saveSetting = () => {
     success: result => {
       let message = result.message;
       console.log(result);
+
+      document.getElementById('popup-message').textContent = message;
+      $('#popupModal').modal('toggle');  
     },
     error: result => {
       console.log(result);
@@ -693,6 +696,11 @@ $("#load-db-1").click( e => {
       getMinNums();
       setSliderValues();
 
+      // Set Save Setting Buttons
+      if (data != null) {
+        $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+      }
+
       drawTable(data);
     },
     error: result => {
@@ -717,6 +725,11 @@ $("#load-db-2").click( e => {
       getMaxNums();
       getMinNums();
       setSliderValues();
+
+      // Set Save Setting Buttons
+      if (data != null) {
+        $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+      }
 
       console.log(data);
       console.log(result);
@@ -743,6 +756,11 @@ $("#load-db-3").click( e => {
       getMaxNums();
       getMinNums();
       setSliderValues();
+
+        // Set Save Setting Buttons
+      if (data != null) {
+        $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+      }
 
       console.log(data);
       console.log(result);
@@ -779,8 +797,9 @@ $("#login").submit(e => {
       document.getElementById('load-db-3').style.display='block';
 
       // Set Save Setting Buttons
-      $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
-
+      if (data != null) {
+        $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+      }
       console.log("success");
       console.log(result);
     },
@@ -850,7 +869,9 @@ $(document).ready( () => {
     document.getElementById('load-db-3').style.display='block';
 
     // Set Save Setting Buttons
-    $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+    if (data != null) {
+      $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+    }
   }
 });
 
@@ -909,6 +930,11 @@ const loadFile = () => {
           getMaxNums();
           getMinNums();
           setSliderValues();
+
+          // Set Save Setting Buttons
+          if (data != null) {
+            $('#saveSetting').prop("disabled", false); // Element(s) are now enabled.
+          }
 
           $('.table').footable({
               "paging": {

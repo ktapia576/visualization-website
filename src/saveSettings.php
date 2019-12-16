@@ -20,19 +20,19 @@
             $result = $conn->query($sql) or die($conn->error);
 
             header('Content-Type: application/json');
-            echo json_encode(array('message' => 'Updated setting success.'));
+            echo json_encode(array('message' => 'Successfully Updated Saved Settings'));
         } elseif ($result->num_rows == 0) {
             $sql = "INSERT INTO 2019F_tapiake.User_Setting (uid, login, AvgWages, EstimatedPopulation, datetime) VALUES ('$uid', '".$login."','$AvgWages','$EstimatedPopulation', NOW())";
 
             $result = $conn->query($sql) or die($conn->error);
 
             header('Content-Type: application/json');
-            echo json_encode(array('message' => 'Saved setting success.'));
+            echo json_encode(array('message' => 'Successfully Saved Settings'));
         } else {
             header('Content-Type: application/json');
             echo json_encode(array('message' => 'Could not save setting'));
         }
     }
-    
+
     saveData();
 ?>
