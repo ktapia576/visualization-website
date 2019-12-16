@@ -11,6 +11,7 @@ let data = null;
 let pieChart = null;
 let barChart = null;
 let lineChart = null;
+let correlationChart= null;
 let maxNum = null;
 let maxNumPopulation = null;
 let maxNumWages = null; 
@@ -137,6 +138,11 @@ const clearWorkspace = () => {
 
   document.getElementById('mapid').style.display='none';
   clearCharts();
+
+  if (correlationChart != null){
+    correlationChart.clearChart();
+    document.getElementById('correlationValue').innerHTML = ``;
+  }
 }
 
 const checkChoice = () => {
@@ -372,6 +378,26 @@ const cleanLineData = () => {
   return newData;
 }
 
+const getAvgWagesArray = () => {
+  let avgWages=[];
+
+  data.forEach(row => {
+    avgWages.push(Number(row.AvgWages));
+  });
+
+  return avgWages;
+}
+
+const getPopulationArray = () => {
+  let estimatedPopulation=[];
+
+  data.forEach(row => {
+    estimatedPopulation.push(Number(row.EstimatedPopulation));
+  });
+
+  return estimatedPopulation;
+}
+
 const getCorrelation = () => {
   let newData=[];
   let avgWages=[];
@@ -381,8 +407,8 @@ const getCorrelation = () => {
 
   data.forEach( row => {
     if(row.AvgWages >= wagesNum && row.EstimatedPopulation >= populationNum){
-      avgWages.push(Number(row.EstimatedPopulation));
-      estimatedPopulation.push(Number(row.AvgWages));
+      estimatedPopulation.push(Number(row.EstimatedPopulation));
+      avgWages.push(Number(row.AvgWages));
     }
   });
 
@@ -394,6 +420,14 @@ const getCorrelation = () => {
 }
 
 const drawCorrelation = () => {
+  if(data == null) {
+    // Show Pop up Modal
+    document.getElementById('popup-title').textContent = "Error"; 
+    document.getElementById('popup-message').textContent = "Load Data First";
+
+    $('#popupModal').modal('toggle');
+  }
+
   let correlationData = new google.visualization.DataTable();
 
   correlationData.addColumn('number', 'Index');
@@ -415,11 +449,50 @@ const drawCorrelation = () => {
   correlationData.addRows(newData);
 
 
-  let correlationChart = new google.visualization.LineChart(document.getElementById('correlation'));
+  correlationChart = new google.visualization.LineChart(document.getElementById('correlation'));
   correlationChart.draw(correlationData, options);
 
   console.log(getCorrelation());
   document.getElementById('correlationValue').innerHTML = `Correlation: ${getCorrelation()} <br/> Number of records: ${newData.length}`;
+}
+
+const drawNonGoogleBar = () => {
+  let ctx = document.getElementById('canvas');
+
+  newData=cleanData("AvgWages");
+  console.log(cleanData("AvgWages"));
+  let labels = [];
+  let nums = [];
+
+  newData.forEach(row => {
+    labels.push(row[0]);
+    nums.push(Math.ceil(row[1]));
+  });
+
+  console.log(labels);
+
+  let myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: 'AvgWage by State',
+              data: nums,
+              backgroundColor: getBackColor(),
+              borderColor: getBorderColor(),
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: false
+                  }
+              }]
+          }
+      }
+  });
 }
 
 const drawLine = (choice, elementID) => {
@@ -848,6 +921,16 @@ $('#AvgWagesSlider').on('change', function() {
 
 $("#bothCharts").click(e => {
   drawCharts();
+});
+
+$("#newCharts").click( e => {
+  mapDrawn=true;
+
+  document.getElementById('mapid').style.display='block';
+  drawMap();
+  console.log(`Draw Map has been called...`);
+
+  drawNonGoogleBar();
 });
 
 $("#load-db-1").click( e => {
