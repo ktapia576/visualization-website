@@ -33,6 +33,7 @@ const clearCharts = () => {
   if (mapDrawn) {
     document.getElementById('mapid').style.display='none';
   }
+  document.getElementById('nonGoogleLine').style.display='none';
 }
 
 const setSliderValues = () => {
@@ -137,6 +138,7 @@ const clearWorkspace = () => {
   $("table").empty(); // removes all child nodes and content from the selected elements
 
   document.getElementById('mapid').style.display='none';
+  document.getElementById('nonGoogleLine').style.display='none';
   clearCharts();
 
   if (correlationChart != null){
@@ -493,6 +495,8 @@ const drawNonGoogleBar = () => {
           }
       }
   });
+
+  myChart.update();
 }
 
 const drawLine = (choice, elementID) => {
@@ -924,12 +928,18 @@ $("#bothCharts").click(e => {
 });
 
 $("#newCharts").click( e => {
-  mapDrawn=true;
+  clearCharts();
+
+  if(!mapDrawn){
+    mapDrawn=true;
+
+    document.getElementById('mapid').style.display='block';
+    drawMap();
+    console.log(`Draw Map has been called...`);
+  }
 
   document.getElementById('mapid').style.display='block';
-  drawMap();
-  console.log(`Draw Map has been called...`);
-
+  document.getElementById('nonGoogleLine').style.display='block';
   drawNonGoogleBar();
 });
 
