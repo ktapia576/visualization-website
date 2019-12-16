@@ -304,6 +304,118 @@ const cleanData = choice => {
     return newData;
 }
 
+// var data = new Array(
+//   new Array(21,54,60,78,82),
+//   new Array(20,54,54,65,45)
+// );
+
+// console.log(pearsonCorrelation(data,0,1))
+const pearsonCorrelation = (prefs, p1, p2) => {
+  var si = [];
+
+  for (var key in prefs[p1]) {
+    if (prefs[p2][key]) si.push(key);
+  }
+
+  var n = si.length;
+
+  if (n == 0) return 0;
+
+  var sum1 = 0;
+  for (var i = 0; i < si.length; i++) sum1 += prefs[p1][si[i]];
+
+  var sum2 = 0;
+  for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
+
+  var sum1Sq = 0;
+  for (var i = 0; i < si.length; i++) {
+    sum1Sq += Math.pow(prefs[p1][si[i]], 2);
+  }
+
+  var sum2Sq = 0;
+  for (var i = 0; i < si.length; i++) {
+    sum2Sq += Math.pow(prefs[p2][si[i]], 2);
+  }
+
+  var pSum = 0;
+  for (var i = 0; i < si.length; i++) {
+    pSum += prefs[p1][si[i]] * prefs[p2][si[i]];
+  }
+
+  var num = pSum - (sum1 * sum2 / n);
+  var den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n) *
+      (sum2Sq - Math.pow(sum2, 2) / n));
+
+  if (den == 0) return 0;
+
+  return num / den;
+}
+
+const cleanCorrelationData = () => {
+  let newData=[];
+  let wagesNum = Number($('#AvgWagesSlider').val());  
+  let populationNum = Number($('#estimatedPopulationsSlider').val());
+
+  console.log(data);
+
+  let count = 0;
+  data.forEach( row => {
+    let index = [];
+    if(row.AvgWages >= wagesNum && row.EstimatedPopulation >= populationNum){
+      index.push(count++);
+      index.push(Number(row.AvgWages));
+      index.push(Number(row.EstimatedPopulation));
+      newData.push(index);
+    }
+  });
+
+  return newData;
+}
+
+const drawCorrelation = () => {
+  let correlationData = new google.visualization.DataTable();
+
+  correlationData.addColumn('number', 'Index');
+  correlationData.addColumn('number', 'AvgWages');
+  correlationData.addColumn('number', 'EstimatedPopulation');
+
+
+  var options = {
+    chart: {
+      title: 'Analytics',
+      subtitle: 'Correlation'
+    },
+    width: 300,
+    height: 200
+  };
+
+  newData = cleanCorrelationData();
+  console.log(newData);
+
+  correlationData.addRows(newData);
+  
+  // correlationData.addRows([
+  //   [1, 37.8, 80.8],
+  //   [2, 30.9, 69.5],
+  //   [3, 25.4,   57],
+  //   [4, 11.7, 18.8],
+  //   [5, 11.9, 17.6],
+  //   [6, 8.8, 13.6],
+  //   [7, 7.6, 12.3],
+  //   [8, 12.3, 29.2],
+  //   [9, 16.9, 42.9],
+  //   [10, 12.8, 30.9],
+  //   [11, 5.3,  7.9],
+  //   [12, 6.6,  8.4]
+  // ]);
+
+  let correlationChart = new google.visualization.LineChart(document.getElementById('correlation'));
+  correlationChart.draw(correlationData, options);
+
+  cleanCorrelationData();
+
+}
+
 const drawLine = (choice, elementID) => {
   lineData = new google.visualization.DataTable();
 
@@ -323,6 +435,7 @@ const drawLine = (choice, elementID) => {
   lineData.addColumn('number', choice);
   
   let newData = cleanData(choice);
+  console.log(newData);
   lineData.addRows(newData);
 
   lineChart = new google.visualization.LineChart(document.getElementById(elementID));
@@ -699,6 +812,10 @@ $("#drawPie").click(e => {
   $('#errorModal').modal('toggle');
 
   console.log("Cannot use pie chart for selected chart...");
+});
+
+$('#analytics').click(e=> {
+  drawCorrelation();
 });
 
 //---------- Map functions ----------------------
