@@ -351,7 +351,7 @@ const pearsonCorrelation = (prefs, p1, p2) => {
   return num / den;
 }
 
-const cleanCorrelationData = () => {
+const cleanLineData = () => {
   let newData=[];
   let wagesNum = Number($('#AvgWagesSlider').val());  
   let populationNum = Number($('#estimatedPopulationsSlider').val());
@@ -363,8 +363,8 @@ const cleanCorrelationData = () => {
     let index = [];
     if(row.AvgWages >= wagesNum && row.EstimatedPopulation >= populationNum){
       index.push(count++);
-      index.push(Number(row.AvgWages));
       index.push(Number(row.EstimatedPopulation));
+      index.push(Number(row.AvgWages));
       newData.push(index);
     }
   });
@@ -372,12 +372,33 @@ const cleanCorrelationData = () => {
   return newData;
 }
 
+const getCorrelation = () => {
+  let newData=[];
+  let avgWages=[];
+  let estimatedPopulation=[];
+  let wagesNum = Number($('#AvgWagesSlider').val());  
+  let populationNum = Number($('#estimatedPopulationsSlider').val());
+
+  data.forEach( row => {
+    if(row.AvgWages >= wagesNum && row.EstimatedPopulation >= populationNum){
+      avgWages.push(Number(row.EstimatedPopulation));
+      estimatedPopulation.push(Number(row.AvgWages));
+    }
+  });
+
+  newData = new Array(avgWages, estimatedPopulation);
+
+  console.log(newData);
+
+  return pearsonCorrelation(newData,0,1);
+}
+
 const drawCorrelation = () => {
   let correlationData = new google.visualization.DataTable();
 
   correlationData.addColumn('number', 'Index');
-  correlationData.addColumn('number', 'AvgWages');
   correlationData.addColumn('number', 'EstimatedPopulation');
+  correlationData.addColumn('number', 'AvgWages');
 
 
   var options = {
@@ -389,31 +410,17 @@ const drawCorrelation = () => {
     height: 200
   };
 
-  newData = cleanCorrelationData();
+  newData = cleanLineData();
   console.log(newData);
 
   correlationData.addRows(newData);
-  
-  // correlationData.addRows([
-  //   [1, 37.8, 80.8],
-  //   [2, 30.9, 69.5],
-  //   [3, 25.4,   57],
-  //   [4, 11.7, 18.8],
-  //   [5, 11.9, 17.6],
-  //   [6, 8.8, 13.6],
-  //   [7, 7.6, 12.3],
-  //   [8, 12.3, 29.2],
-  //   [9, 16.9, 42.9],
-  //   [10, 12.8, 30.9],
-  //   [11, 5.3,  7.9],
-  //   [12, 6.6,  8.4]
-  // ]);
+
 
   let correlationChart = new google.visualization.LineChart(document.getElementById('correlation'));
   correlationChart.draw(correlationData, options);
 
-  cleanCorrelationData();
-
+  console.log(getCorrelation());
+  document.getElementById('correlationValue').innerHTML = `Correlation: ${getCorrelation()} <br/> Number of records: ${newData.length}`;
 }
 
 const drawLine = (choice, elementID) => {
@@ -830,11 +837,13 @@ $('#analytics').click(e=> {
 
 $('#estimatedPopulationsSlider').on('change', function() {
   colorTablePopulation();
+  drawCorrelation();
   console.log( this.value );
 });
 
 $('#AvgWagesSlider').on('change', function() {
   colorTableWages();
+  drawCorrelation();
   console.log( this.value );
 });
 
