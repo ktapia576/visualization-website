@@ -35,15 +35,58 @@ const clearCharts = () => {
 }
 
 const setSliderValues = () => {
+  let cookies = Cookies.get(); // get object of all cookies
+
   $('#estimatedPopulationsSlider').attr('min', minNumPopulation);
   $('#estimatedPopulationsSlider').attr('max', maxNumPopulation);
-  $('#estimatedPopulationsSlider').val(Math.ceil(getAvgPopulation()));
-  document.getElementById('rangeValue1').textContent = `Value: ${Math.ceil(getAvgPopulation())}`;
-  
+
   $('#AvgWagesSlider').attr('min', minNumWages);
   $('#AvgWagesSlider').attr('max', maxNumWages);
-  $('#AvgWagesSlider').val(Math.ceil(getAvgAvgWages()));
-  document.getElementById('rangeValue2').textContent = `Value: ${Math.ceil(getAvgAvgWages())}`;
+
+  // Check if Cookie set
+  if (cookies.username == null){ // Check if null and undefined simultaneously
+    $('#estimatedPopulationsSlider').val(Math.ceil(getAvgPopulation()));
+    document.getElementById('rangeValue1').textContent = `Value: ${Math.ceil(getAvgPopulation())}`;
+    
+
+    $('#AvgWagesSlider').val(Math.ceil(getAvgAvgWages()));
+    document.getElementById('rangeValue2').textContent = `Value: ${Math.ceil(getAvgAvgWages())}`;
+  } else {
+    $.ajax({
+      type:"POST",
+      url:"src/loadSettings.php",
+      data: {
+        uid: cookies.uid
+      },
+      success: result => {
+        let message = result.message;
+        let settings = JSON.parse(result.settings);
+        let AvgWages = settings[0].AvgWages;
+        let EstimatedPopulation = settings[0].EstimatedPopulation;
+
+        console.log(message);
+
+        $('#estimatedPopulationsSlider').val(EstimatedPopulation);
+        document.getElementById('rangeValue1').textContent = `Value: ${EstimatedPopulation}`;
+
+        $('#AvgWagesSlider').val(AvgWages);
+        document.getElementById('rangeValue2').textContent = `Value: ${AvgWages}`;
+
+        console.log(settings);
+      },
+      error: result => {
+        console.log(result);
+        console.log(result.message);
+        $('#estimatedPopulationsSlider').val(Math.ceil(getAvgPopulation()));
+        document.getElementById('rangeValue1').textContent = `Value: ${Math.ceil(getAvgPopulation())}`;
+        
+    
+        $('#AvgWagesSlider').val(Math.ceil(getAvgAvgWages()));
+        document.getElementById('rangeValue2').textContent = `Value: ${Math.ceil(getAvgAvgWages())}`;
+      }
+    });
+  }
+
 }
 
 const colorTablePopulation = () => {
@@ -543,6 +586,7 @@ const saveSetting = () => {
       console.log(result);
 
       document.getElementById('popup-message').textContent = message;
+      document.getElementById('popup-title').textContent = 'Success';
       $('#popupModal').modal('toggle');  
     },
     error: result => {
