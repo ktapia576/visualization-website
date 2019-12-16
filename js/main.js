@@ -406,7 +406,6 @@ const drawCorrelation = () => {
       title: 'Analytics',
       subtitle: 'Correlation'
     },
-    width: 300,
     height: 200
   };
 
