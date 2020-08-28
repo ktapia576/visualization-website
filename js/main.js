@@ -312,53 +312,6 @@ const cleanData = choice => {
     return newData;
 }
 
-// var data = new Array(
-//   new Array(21,54,60,78,82),
-//   new Array(20,54,54,65,45)
-// );
-
-// console.log(pearsonCorrelation(data,0,1))
-const pearsonCorrelation = (prefs, p1, p2) => {
-  var si = [];
-
-  for (var key in prefs[p1]) {
-    if (prefs[p2][key]) si.push(key);
-  }
-
-  var n = si.length;
-
-  if (n == 0) return 0;
-
-  var sum1 = 0;
-  for (var i = 0; i < si.length; i++) sum1 += prefs[p1][si[i]];
-
-  var sum2 = 0;
-  for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
-
-  var sum1Sq = 0;
-  for (var i = 0; i < si.length; i++) {
-    sum1Sq += Math.pow(prefs[p1][si[i]], 2);
-  }
-
-  var sum2Sq = 0;
-  for (var i = 0; i < si.length; i++) {
-    sum2Sq += Math.pow(prefs[p2][si[i]], 2);
-  }
-
-  var pSum = 0;
-  for (var i = 0; i < si.length; i++) {
-    pSum += prefs[p1][si[i]] * prefs[p2][si[i]];
-  }
-
-  var num = pSum - (sum1 * sum2 / n);
-  var den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n) *
-      (sum2Sq - Math.pow(sum2, 2) / n));
-
-  if (den == 0) return 0;
-
-  return num / den;
-}
-
 const cleanLineData = () => {
   let newData=[];
   let wagesNum = Number($('#AvgWagesSlider').val());  
