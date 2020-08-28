@@ -95,13 +95,15 @@ const colorTablePopulation = () => {
   // index 4 is Estimated population | index 5 is AvgWages
 
   $('#table > tbody  > tr').each(function(index, tr) { 
-    let cellNum = parseFloat(tr.cells[4].innerHTML.replace(/,/g, ''));
+    let cellNum = parseFloat(tr.cells[4].innerHTML.replace(/,/g, '')); // Replace commas with no space
     let sliderVal = Number($('#estimatedPopulationsSlider').val());
 
     if(cellNum >= sliderVal){
-      $(tr.cells[4]).addClass("text-success");
+      $(tr.cells[4]).addClass("text-light");
+      $(tr.cells[4]).addClass("bg-success");
     } else {
-      $(tr.cells[4]).removeClass("text-success");
+      $(tr.cells[4]).removeClass("text-light");
+      $(tr.cells[4]).removeClass("bg-success");
     }
 
     // $(tr.cells[4]).removeClass("bg-success");
@@ -113,7 +115,7 @@ const colorTableWages = () => {
   // index 4 is Estimated population | index 5 is AvgWages
 
   $('#table > tbody  > tr').each(function(index, tr) { 
-    let cellNum = parseFloat(tr.cells[5].innerHTML.replace(/,/g, ''));
+    let cellNum = parseFloat(tr.cells[5].innerHTML.replace(/,/g, ''));  // Replace commas with no space
     
     let sliderVal = Number($('#AvgWagesSlider').val());
 
@@ -121,9 +123,11 @@ const colorTableWages = () => {
     console.log(sliderVal);
 
     if(cellNum >= sliderVal){
-      $(tr.cells[5]).addClass("text-danger");
+      $(tr.cells[5]).addClass("text-light");
+      $(tr.cells[5]).addClass("bg-danger");
     } else {
-      $(tr.cells[5]).removeClass("text-danger");
+      $(tr.cells[5]).removeClass("text-light");
+      $(tr.cells[5]).removeClass("bg-danger");
     }
 
     // console.log(`slider value: ${$('#AvgWagesSlider').val()}`);
