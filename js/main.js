@@ -400,64 +400,6 @@ const getPopulationArray = () => {
   return estimatedPopulation;
 }
 
-const getCorrelation = () => {
-  let newData=[];
-  let avgWages=[];
-  let estimatedPopulation=[];
-  let wagesNum = Number($('#AvgWagesSlider').val());  
-  let populationNum = Number($('#estimatedPopulationsSlider').val());
-
-  data.forEach( row => {
-    if(row.AvgWages >= wagesNum && row.EstimatedPopulation >= populationNum){
-      estimatedPopulation.push(Number(row.EstimatedPopulation));
-      avgWages.push(Number(row.AvgWages));
-    }
-  });
-
-  newData = new Array(avgWages, estimatedPopulation);
-
-  console.log(newData);
-
-  return pearsonCorrelation(newData,0,1);
-}
-
-const drawCorrelation = () => {
-  if(data == null) {
-    // Show Pop up Modal
-    document.getElementById('popup-title').textContent = "Error"; 
-    document.getElementById('popup-message').textContent = "Load Data First";
-
-    $('#popupModal').modal('toggle');
-  }
-
-  let correlationData = new google.visualization.DataTable();
-
-  correlationData.addColumn('number', 'Index');
-  correlationData.addColumn('number', 'EstimatedPopulation');
-  correlationData.addColumn('number', 'AvgWages');
-
-
-  var options = {
-    chart: {
-      title: 'Analytics',
-      subtitle: 'Correlation'
-    },
-    height: 200
-  };
-
-  newData = cleanLineData();
-  console.log(newData);
-
-  correlationData.addRows(newData);
-
-
-  correlationChart = new google.visualization.LineChart(document.getElementById('correlation'));
-  correlationChart.draw(correlationData, options);
-
-  console.log(getCorrelation());
-  document.getElementById('correlationValue').innerHTML = `Correlation: ${getCorrelation()} <br/> Number of records: ${newData.length}`;
-}
-
 const drawNonGoogleBar = () => {
   let ctx = document.getElementById('canvas');
 
@@ -897,9 +839,6 @@ $("#drawPie").click(e => {
   console.log("Cannot use pie chart for selected chart...");
 });
 
-$('#analytics').click(e=> {
-  drawCorrelation();
-});
 
 //---------- Map functions ----------------------
  $("#drawMap").click(e => {
@@ -913,13 +852,11 @@ $('#analytics').click(e=> {
 
 $('#estimatedPopulationsSlider').on('change', function() {
   colorTablePopulation();
-  drawCorrelation();
   console.log( this.value );
 });
 
 $('#AvgWagesSlider').on('change', function() {
   colorTableWages();
-  drawCorrelation();
   console.log( this.value );
 });
 
