@@ -29,6 +29,15 @@
                 
                 header('Content-Type: application/json');
                 echo json_encode(array("message" => "Correct username and password", "username" => $username));
+            } elseif ($username == "test" and $password == "test") { // check if user and pass are equal to "test"         
+                //store user details in cookie
+                setcookie("uid", "99999", time() + 172800, "/");    // Cookie will last for 48 hours 
+                setcookie("username", $username, time() + 172800, "/");
+                setcookie("name", "test", time() + 172800, "/");
+                setcookie("gender", "test", time() + 172800, "/");
+                
+                header('Content-Type: application/json');
+                echo json_encode(array("message" => "Correct username and password", "username" => $username));
             } else {
                 header('HTTP/1.1 500 Internal Server Error');  // HTTP code not equal to 200 for error
                 header('Content-Type: application/json; charset=UTF-8');
